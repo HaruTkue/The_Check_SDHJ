@@ -1,6 +1,11 @@
 package org.example;
 
+
+import org.xbill.DNS.*;
+
+import java.net.InetAddress;
 import java.util.Scanner;
+
 
 public class Main {
     public static void main(String[] args) {
@@ -9,5 +14,8 @@ public class Main {
 
         String CheckDomain = scanner.nextLine();
         System.out.println(CheckDomain +"の設定を検索します。");
+        scanner.close();
+
+        Lookup lookup = new Lookup(CheckDomain,Type.CNAME);
     }
 }
