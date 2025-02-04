@@ -1,9 +1,5 @@
 package org.example;
 
-
-import org.xbill.DNS.*;
-
-import java.net.InetAddress;
 import java.util.Scanner;
 
 
