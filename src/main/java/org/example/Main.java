@@ -16,6 +16,5 @@ public class Main {
         System.out.println(CheckDomain +"の設定を検索します。");
         scanner.close();
 
-        Lookup lookup = new Lookup(CheckDomain,Type.CNAME);
     }
 }
