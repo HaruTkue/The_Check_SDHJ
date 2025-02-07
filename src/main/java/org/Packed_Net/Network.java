@@ -3,13 +3,13 @@ package org.Packed_Net;
 import org.xbill.DNS.*;
 import org.xbill.DNS.Record;
 
-import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
 
 public class Network{
     public void Get_CNAME(String CheckDomain){
-        List<Name> CNAME_list = new ArrayList<Name>();
+        List<String> CNAME_list = new ArrayList<String>();
         try {
             // lookupの指定
             System.out.println("処理を開始します。");
@@ -22,9 +22,13 @@ public class Network{
                 for (Record record:records){
                     CNAMERecord cname = (CNAMERecord) record;
                     System.out.println(CheckDomain + cname.getTarget());
-                    CNAME_list.add(cname.getTarget());
+                    String ToString = cname.getTarget().toString();
+
+                    CNAME_list.add(ToString);
                 }
-                Search_prot(CNAME_list);
+
+                Search search_class = new Search();
+                search_class.Search_prot(CNAME_list);
             }else{
                 System.out.println("CNAMEが存在しませんでした:"+ CheckDomain);
             }
@@ -34,9 +38,17 @@ public class Network{
         }
         System.out.println("処理を終了します。");
     }
-    public void Search_prot(List<Name> CNAME_list){
-        System.out.println("サーチ処理に移ります。");
+
+    //ファイル内のリストを作成する
+    public List<Class<?>> ListInClass(){
+        List<Class<?>> DoClassList = new ArrayList<Class<?>>();
+        DoClassList
+        return DoClassList;
+    }
+    public void Search_prot(List<String> CNAME_list){
         
+        System.out.println(CNAME_list);
+        System.out.println("サーチ処理に移ります。");
     }
     
 }
