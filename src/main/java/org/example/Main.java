@@ -1,12 +1,8 @@
 package org.example;
 
 import org.Packed_Net.Network;
-import org.xbill.DNS.*;
-import org.xbill.DNS.Record;
 
 import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.List;
 
 
 
