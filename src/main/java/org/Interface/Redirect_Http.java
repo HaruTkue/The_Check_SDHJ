@@ -1,6 +1,6 @@
 package org.Interface;
 
-public class Redirect_Http implements Access_Interface {
+public class Redirect_Http implements Access_Templature_Interface {
     public boolean CheckMethods(String Test_URL){
         return true;
     }

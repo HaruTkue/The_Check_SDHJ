@@ -46,7 +46,7 @@ public class Network {
         // IOException-をthrowすることで例外規定の動作。
         System.out.println("クラスをget中");
         List<Class<?>> DoClassList = new ArrayList<Class<?>>();
-        File DirectPath = new File("src/main/java/org/Interface/Interfaces");
+        File DirectPath = new File("src/main/java/org/Interface");
         // 存在しない場合の対策
         if (!DirectPath.exists() || !DirectPath.isDirectory()) {
             System.out.println("クラスなんかねえよ");
@@ -59,8 +59,9 @@ public class Network {
             System.out.println("ファイルの読み取り開始。");
             if (file.isFile() && file.getName().endsWith(".class")) {
                 String className = file.getName().replace(".class","");
+                System.out.println(className);
                 //個々の構文にエラー?
-                Class<?> append_Class = classLoader.loadClass(className);
+                Class<?> append_Class = classLoader.loadClass("org.Interface." + className);
                 DoClassList.add(append_Class);
             }
         }
@@ -85,6 +86,7 @@ public class Network {
         // 事前に処理結果を保存するリストを作成する。
         List<String> Access_Result = new ArrayList<>();
 
+        System.out.println("二重for文突入");
         // 二重for文で適切なコードを検知する。 -CNAME上
         for (String CNAME : CNAME_list) {
             System.out.println(CNAME);
@@ -92,12 +94,15 @@ public class Network {
             for (Class<?> Check_Class : DoClassList) {
                 try {
                     // ここで整合性を確認する -インスタンスを作成
+                    
                     Object Play_Instance = Check_Class.getDeclaredConstructor().newInstance();
                     // インスタンス上でMethodsを実行
-
+                    
                     // methodを取得する。
                     Method Check_Method = Check_Class.getMethod("CheckMethods", String.class);
                     boolean Check_Result = (boolean) Check_Method.invoke(Play_Instance, CNAME);
+                    System.out.println("チェックResultの返し");
+                    System.out.println(Check_Result);
                     // 結果を取得する。
                     if (Check_Result) {
                         Method Check_acess_Method = Check_Class.getMethod("Main_Access", String.class);
