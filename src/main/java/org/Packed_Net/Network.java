@@ -21,45 +21,41 @@ public class Network {
             lookup.run();
 
             if (lookup.getResult() == Lookup.SUCCESSFUL) {
+                //CNAMEレコードが発見されたときs
                 Record[] records = lookup.getAnswers();
-                System.out.println("適切に読むことができました。");
                 for (Record record : records) {
                     CNAMERecord cname = (CNAMERecord) record;
-                    System.out.println(CheckDomain + cname.getTarget());
                     String ToString = cname.getTarget().toString();
 
                     CNAME_list.add(ToString);
                 }
                 Search_prot(CNAME_list);
             } else {
+                //存在していないことと恐らく脆弱性がなさそうであると報告する。
                 System.out.println("CNAMEが存在しませんでした:" + CheckDomain);
             }
         } catch (TextParseException e) {
             System.out.println("処理に不具合が発生しました。");
             e.printStackTrace();
         }
-        System.out.println("処理を終了します。");
     }
 
     // ファイル内のリストを作成する 読み取りまで
     public static List<Class<?>> ListInClass() throws IOException, ClassNotFoundException {
         // IOException-をthrowすることで例外規定の動作。
-        System.out.println("クラスをget中");
         List<Class<?>> DoClassList = new ArrayList<Class<?>>();
         File DirectPath = new File("src/main/java/org/Interface");
         // 存在しない場合の対策
         if (!DirectPath.exists() || !DirectPath.isDirectory()) {
-            System.out.println("クラスなんかねえよ");
+            System.out.println("クラスが見つかりませんでした。");
             throw new IllegalArgumentException("Invalid");
         }
         // Urlを取得する
         URL url = DirectPath.toURI().toURL();
         URLClassLoader classLoader = new URLClassLoader(new URL[] { url });
         for (File file : DirectPath.listFiles()) {
-            System.out.println("ファイルの読み取り開始。");
             if (file.isFile() && file.getName().endsWith(".class")) {
                 String className = file.getName().replace(".class","");
-                System.out.println(className);
                 //個々の構文にエラー?
                 Class<?> append_Class = classLoader.loadClass("org.Interface." + className);
                 DoClassList.add(append_Class);
@@ -76,7 +72,6 @@ public class Network {
         List<Class<?>> DoClassList = new ArrayList<>();
         try {
             List<Class<?>> ClassList = ListInClass();
-            System.out.println(ClassList);
             DoClassList = ClassList;
         } catch (Exception e) {
             // 適切に処理できなかった場合
@@ -86,10 +81,9 @@ public class Network {
         // 事前に処理結果を保存するリストを作成する。
         List<String> Access_Result = new ArrayList<>();
 
-        System.out.println("二重for文突入");
         // 二重for文で適切なコードを検知する。 -CNAME上
         for (String CNAME : CNAME_list) {
-            System.out.println(CNAME);
+            System.out.println("発見されたCNAME:" + CNAME);
             // それぞれとの適合を確認するためのやつ
             for (Class<?> Check_Class : DoClassList) {
                 try {
