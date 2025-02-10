@@ -111,10 +111,12 @@ public class Network {
                     e.printStackTrace();
                 }
 
+
             }
 
         }
-
+        //ここから処理を別の処理を試みる。
+        
     }
 
 
