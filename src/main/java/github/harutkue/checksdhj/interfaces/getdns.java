@@ -12,6 +12,9 @@ import org.xbill.DNS.Record;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import github.harutkue.checksdhj.interfaces.Providerlist;
+
 //Aレコードを取得するプログラム(CheckMethodsで用いる)
 public class getdns {
     public static List<String> getArecords(String Domain){
