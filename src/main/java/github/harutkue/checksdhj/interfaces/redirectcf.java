@@ -4,16 +4,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 
-import org.xbill.DNS.*;
-import org.xbill.DNS.Record;
-
 import github.harutkue.checksdhj.interfaces.getnet.getdns;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.net.URL;
 import java.net.HttpURLConnection;
 
 public class redirectcf implements Access_Templature_Interface{
