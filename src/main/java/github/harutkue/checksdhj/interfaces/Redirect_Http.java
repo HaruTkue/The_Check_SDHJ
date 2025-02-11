@@ -51,7 +51,7 @@ public class Redirect_Http implements Access_Templature_Interface {
             if (responseCode >=200 && responseCode < 400){
                 Return_Value = Access_Domain+ "との疎通が取れました:http";
             }else{
-                Return_Value = Access_Domain+"にはサブドメインハイジャックのリスクがあります!";
+                Return_Value = Access_Domain+"疎通確認ができませんでした(リスクあり)";
             }
             System.out.println(Return_Value);
             return Return_Value;

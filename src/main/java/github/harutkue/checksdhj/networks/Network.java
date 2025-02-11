@@ -2,6 +2,7 @@ package github.harutkue.checksdhj.networks;
 
 import org.xbill.DNS.*;
 import org.xbill.DNS.Record;
+import org.xbill.DNS.tools.primary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,10 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+
+import github.harutkue.checksdhj.interfaces.getdns;
+import github.harutkue.checksdhj.interfaces.redirectcf;
+import github.harutkue.checksdhj.interfaces.Redirect_Http;
 
 public class Network {
     public void Get_CNAME(String CheckDomain) {
@@ -21,7 +26,7 @@ public class Network {
             lookup.run();
 
             if (lookup.getResult() == Lookup.SUCCESSFUL) {
-                //CNAMEレコードが発見されたときs
+                // CNAMEレコードが発見されたときs
                 Record[] records = lookup.getAnswers();
                 for (Record record : records) {
                     CNAMERecord cname = (CNAMERecord) record;
@@ -31,7 +36,7 @@ public class Network {
                 }
                 Search_prot(CNAME_list);
             } else {
-                //存在していないことと恐らく脆弱性がなさそうであると報告する。
+                // 存在していないことと恐らく脆弱性がなさそうであると報告する。
                 System.out.println("CNAMEが存在しませんでした:" + CheckDomain);
             }
         } catch (TextParseException e) {
@@ -55,9 +60,9 @@ public class Network {
         URLClassLoader classLoader = new URLClassLoader(new URL[] { url });
         for (File file : DirectPath.listFiles()) {
             if (file.isFile() && file.getName().endsWith(".class")) {
-                String className = file.getName().replace(".class","");
-                //org.Interface.から変更有
-                //github.harutkue.checksdhj.interfaces.
+                String className = file.getName().replace(".class", "");
+                // org.Interface.から変更有
+                // github.harutkue.checksdhj.interfaces.
                 Class<?> append_Class = classLoader.loadClass("github.harutkue.checksdhj.interfaces." + className);
                 DoClassList.add(append_Class);
             }
@@ -68,11 +73,21 @@ public class Network {
         return DoClassList;
     }
 
+    public static List<Class<?>> Listic() {
+        List<Class<?>> class_list = new ArrayList<>();
+
+        class_list.add(redirectcf.class);
+
+        class_list.add(Redirect_Http.class);
+
+        return class_list;
+    }
+
     public void Search_prot(List<String> CNAME_list) {
         // Interfacesを使用した Classを取得する
         List<Class<?>> DoClassList = new ArrayList<>();
         try {
-            List<Class<?>> ClassList = ListInClass();
+            List<Class<?>> ClassList = Listic();
             DoClassList = ClassList;
         } catch (Exception e) {
             // 適切に処理できなかった場合
@@ -81,7 +96,7 @@ public class Network {
         }
         // 事前に処理結果を保存するリストを作成する。
         List<String> Access_Result = new ArrayList<>();
-
+        System.err.println(DoClassList);
         // 二重for文で適切なコードを検知する。 -CNAME上
         for (String CNAME : CNAME_list) {
             System.out.println("発見されたCNAME:" + CNAME);
@@ -89,10 +104,10 @@ public class Network {
             for (Class<?> Check_Class : DoClassList) {
                 try {
                     // ここで整合性を確認する -インスタンスを作成
-                    
+
                     Object Play_Instance = Check_Class.getDeclaredConstructor().newInstance();
                     // インスタンス上でMethodsを実行
-                    
+
                     // methodを取得する。
                     Method Check_Method = Check_Class.getMethod("CheckMethods", String.class);
                     boolean Check_Result = (boolean) Check_Method.invoke(Play_Instance, CNAME);
@@ -112,13 +127,14 @@ public class Network {
                     e.printStackTrace();
                 }
 
-            
             }
 
         }
-        //ここから処理を別の処理を試みる。
+        // ここから処理を別の処理を試みる。
         System.out.println(Access_Result);
+        if (Access_Result == null){
+            System.out.println("サブドメインハイジャックのリスクがあります。");
+        }
     }
-
 
 }
