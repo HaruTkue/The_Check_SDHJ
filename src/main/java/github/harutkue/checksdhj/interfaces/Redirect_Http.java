@@ -1,10 +1,13 @@
-package org.Interface;
+package github.harutkue.checksdhj.interfaces;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Hashtable;
 import javax.naming.directory.InitialDirContext;
+
+import github.harutkue.checksdhj.interfaces.getnet.getdns;
+
 import java.net.InetAddress;
 import java.net.Socket;
 

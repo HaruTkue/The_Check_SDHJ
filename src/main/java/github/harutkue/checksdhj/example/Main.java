@@ -1,10 +1,10 @@
-package org.example;
-
-import org.Packed_Net.Network;
+package github.harutkue.checksdhj.example;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import github.harutkue.checksdhj.networks.Network;
 
 
 

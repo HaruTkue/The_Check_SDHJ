@@ -1,4 +1,4 @@
-package org.Packed_Net;
+package github.harutkue.checksdhj.networks;
 
 import org.xbill.DNS.*;
 import org.xbill.DNS.Record;
@@ -44,7 +44,7 @@ public class Network {
     public static List<Class<?>> ListInClass() throws IOException, ClassNotFoundException {
         // IOException-をthrowすることで例外規定の動作。
         List<Class<?>> DoClassList = new ArrayList<Class<?>>();
-        File DirectPath = new File("src/main/java/org/Interface");
+        File DirectPath = new File("src/main/java/github/harutkue/checksdhj/interfaces");
         // 存在しない場合の対策
         if (!DirectPath.exists() || !DirectPath.isDirectory()) {
             System.out.println("クラスが見つかりませんでした。");
@@ -56,8 +56,9 @@ public class Network {
         for (File file : DirectPath.listFiles()) {
             if (file.isFile() && file.getName().endsWith(".class")) {
                 String className = file.getName().replace(".class","");
-                //個々の構文にエラー?
-                Class<?> append_Class = classLoader.loadClass("org.Interface." + className);
+                //org.Interface.から変更有
+                //github.harutkue.checksdhj.interfaces.
+                Class<?> append_Class = classLoader.loadClass("github.harutkue.checksdhj.interfaces." + className);
                 DoClassList.add(append_Class);
             }
         }
