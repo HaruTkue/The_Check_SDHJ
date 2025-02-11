@@ -1,5 +1,8 @@
 package github.harutkue.checksdhj.interfaces;
 
+import java.util.List;
+import java.util.Map;
+
 import github.harutkue.checksdhj.interfaces.getnet.getdns;
 
 public class Redirect_Githubpages implements Access_Templature_Interface {
@@ -8,5 +11,8 @@ public class Redirect_Githubpages implements Access_Templature_Interface {
     }
     public String Main_Access(String Access_Domain){
         return "TestValue";
+    }
+    public List<String> getProviderService(){
+        return null;
     }
 }

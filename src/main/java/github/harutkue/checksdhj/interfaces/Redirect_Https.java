@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+
 import javax.naming.directory.InitialDirContext;
 
 import github.harutkue.checksdhj.interfaces.getnet.getdns;
@@ -58,5 +61,8 @@ public class Redirect_Https implements Access_Templature_Interface {
         }catch (Exception e){
             return "Error";
         }
+    }
+    public List<String> getProviderService(){
+        return null;
     }
 }

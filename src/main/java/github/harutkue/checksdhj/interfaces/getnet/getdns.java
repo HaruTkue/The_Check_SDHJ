@@ -43,18 +43,22 @@ public class getdns {
         System.out.println(check_record);
         for(String record: check_record){
             String provider = getServiceProvider(record);
+            return_datas.add(provider);
         }
         
         //返り血
         return return_datas;
     }
-    public String getServiceProvider(String record){
+    public static String getServiceProvider(String record){
         //プロバイダのマップ --キーと対応した値を返す。
         Map<String,String> PROVIDERLIST = Providerlist.retProvider();
         for(Map.Entry<String,String> entry: PROVIDERLIST.entrySet()){
             //もし、取得したIPアドレスがの先頭部がプロバイダリストと一致するか
+            if (record.startsWith(entry.getKey())){
+                return entry.getValue();
+            }
         }
-        return "METEOR";
+        return "Nothing";
     }
     
 }
