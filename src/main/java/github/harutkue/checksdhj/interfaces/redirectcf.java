@@ -1,11 +1,8 @@
 package github.harutkue.checksdhj.interfaces;
 
-import java.io.IOException;
+import github.harutkue.checksdhj.interfaces.getdns;
+
 import java.net.URL;
-import java.sql.Connection;
-
-import github.harutkue.checksdhj.interfaces.getnet.getdns;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +51,7 @@ public class redirectcf implements Access_Templature_Interface{
         }catch(Exception e){
             
         }
-        return_str ="cloudflare:" +Access_Domain +"は適切に設定されていません。";
+        return_str ="cloudflare:" +Access_Domain +"にはサブドメインハイジャックのリスクがあります。";
         return return_str;
     }
        public List<String> getProviderService(){

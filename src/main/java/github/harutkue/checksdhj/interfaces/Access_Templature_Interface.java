@@ -1,8 +1,6 @@
 package github.harutkue.checksdhj.interfaces;
 
 import java.util.Map;
-
-import github.harutkue.checksdhj.interfaces.getnet.getdns;
 import java.util.HashMap;
 import java.util.List;
 //Interfaceのみのやつ。

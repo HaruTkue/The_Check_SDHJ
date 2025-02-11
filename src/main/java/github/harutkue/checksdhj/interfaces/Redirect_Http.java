@@ -9,8 +9,6 @@ import java.util.Map;
 
 import javax.naming.directory.InitialDirContext;
 
-import github.harutkue.checksdhj.interfaces.getnet.getdns;
-
 import java.net.InetAddress;
 import java.net.Socket;
 

@@ -3,8 +3,6 @@ package github.harutkue.checksdhj.interfaces;
 import java.util.List;
 import java.util.Map;
 
-import github.harutkue.checksdhj.interfaces.getnet.getdns;
-
 public class Redirect_Githubpages implements Access_Templature_Interface {
     public boolean CheckMethods(String Domain){
         return true;

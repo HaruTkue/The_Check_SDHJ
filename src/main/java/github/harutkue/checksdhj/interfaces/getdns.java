@@ -1,20 +1,20 @@
-package github.harutkue.checksdhj.interfaces.getnet;
+package github.harutkue.checksdhj.interfaces;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.IOException;
 
 import org.xbill.DNS.*;
 import org.xbill.DNS.Record;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import github.harutkue.checksdhj.interfaces.getnet.Providerlist;
 //Aレコードを取得するプログラム(CheckMethodsで用いる)
 public class getdns {
-    public List<String> getArecords(String Domain){
+    public static List<String> getArecords(String Domain){
         List<String> return_datas = new ArrayList<>();
         try{
             Lookup lookup = new Lookup(Domain,Type.A);
@@ -38,7 +38,7 @@ public class getdns {
         }
         return return_datas;
     }
-    public List<String> getService(List<String> check_record){
+    public static List<String> getService(List<String> check_record){
         List<String> return_datas = new ArrayList<>();
         System.out.println(check_record);
         for(String record: check_record){
