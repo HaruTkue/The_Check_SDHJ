@@ -14,6 +14,7 @@ import java.net.URLClassLoader;
 
 import github.harutkue.checksdhj.interfaces.getdns;
 import github.harutkue.checksdhj.interfaces.redirectcf;
+import github.harutkue.checksdhj.interfaces.Redirect_Githubpages;
 import github.harutkue.checksdhj.interfaces.Redirect_Http;
 
 public class Network {
@@ -76,9 +77,11 @@ public class Network {
     public static List<Class<?>> Listic() {
         List<Class<?>> class_list = new ArrayList<>();
 
-        class_list.add(redirectcf.class);
+        //class_list.add(redirectcf.class);
 
-        class_list.add(Redirect_Http.class);
+        //class_list.add(Redirect_Http.class);
+
+        class_list.add(Redirect_Githubpages.class);
 
         return class_list;
     }
