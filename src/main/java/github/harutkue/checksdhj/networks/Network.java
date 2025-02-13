@@ -111,8 +111,6 @@ public class Network {
                     // methodを取得する。
                     Method Check_Method = Check_Class.getMethod("CheckMethods", String.class);
                     boolean Check_Result = (boolean) Check_Method.invoke(Play_Instance, CNAME);
-                    System.out.println("チェックResultの返し");
-                    System.out.println(Check_Result);
                     // 結果を取得する。
                     if (Check_Result) {
                         Method Check_acess_Method = Check_Class.getMethod("Main_Access", String.class);
@@ -127,14 +125,16 @@ public class Network {
                     e.printStackTrace();
                 }
 
+                // ここから処理を別の処理を試みる。
+                System.out.println(Access_Result);
+                if (Access_Result.isEmpty()) {
+                    System.out.println("対応していないサービスです。");
+                }
+
             }
 
         }
-        // ここから処理を別の処理を試みる。
-        System.out.println(Access_Result);
-        if (Access_Result == null){
-            System.out.println("サブドメインハイジャックのリスクがあります。");
-        }
+
     }
 
 }

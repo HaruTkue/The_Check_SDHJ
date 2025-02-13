@@ -53,7 +53,6 @@ public class Redirect_Http implements Access_Templature_Interface {
             }else{
                 Return_Value = Access_Domain+"疎通確認ができませんでした(リスクあり)";
             }
-            System.out.println(Return_Value);
             return Return_Value;
         }catch (Exception e){
             return "Error";
