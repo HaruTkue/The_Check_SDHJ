@@ -13,6 +13,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 import github.harutkue.checksdhj.interfaces.getdns;
+import github.harutkue.checksdhj.interfaces.redirectWordpress;
 import github.harutkue.checksdhj.interfaces.redirectcf;
 import github.harutkue.checksdhj.interfaces.Redirect_Githubpages;
 import github.harutkue.checksdhj.interfaces.Redirect_Http;
@@ -82,6 +83,7 @@ public class Network {
         //class_list.add(Redirect_Http.class);
 
         class_list.add(Redirect_Githubpages.class);
+        class_list.add(redirectWordpress.class);
 
         return class_list;
     }
