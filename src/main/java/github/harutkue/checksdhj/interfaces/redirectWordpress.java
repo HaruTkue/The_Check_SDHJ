@@ -15,7 +15,6 @@ public class redirectWordpress implements Access_Templature_Interface {
             if (WORD_PRESS.matcher(Domain).matches()){
                 return true;
             }else{
-                System.out.println("Wordpressではありません");
                 return false;
 
             }
@@ -37,9 +36,9 @@ public class redirectWordpress implements Access_Templature_Interface {
 
             int responseCode = connection.getResponseCode();
             if(responseCode >= 200 && responseCode <400){
-                Return_Value = Access_Domain + "OK";
+                Return_Value = Access_Domain + ":OK";
             }else{
-                Return_Value = Access_Domain +"疎通確認できなかった";
+                Return_Value = Access_Domain +":NO";
             }
             return Return_Value;
 

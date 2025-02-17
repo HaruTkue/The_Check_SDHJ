@@ -6,6 +6,7 @@ import org.xbill.DNS.tools.primary;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -87,7 +88,7 @@ public class Network {
 
         return class_list;
     }
-
+    //
     public void Search_prot(List<String> CNAME_list) {
         // Interfacesを使用した Classを取得する
         List<Class<?>> DoClassList = new ArrayList<>();
@@ -130,16 +131,35 @@ public class Network {
                     e.printStackTrace();
                 }
 
-                // ここから処理を別の処理を試みる。
-                System.out.println(Access_Result);
-                if (Access_Result.isEmpty()) {
-                    System.out.println("対応していないサービスです。");
-                }
-
             }
 
         }
+        //ここに判別用の処理を足す。
+        printFunction(Access_Result);
+        
+        
 
+    }
+    public void printFunction(List<String> Access_Result){
+        if (Access_Result.isEmpty()) {
+            System.out.println("対応していないサービスです。");
+        }else{
+            for(String Result:Access_Result){
+
+                //疎通確認が正しくできたか、できてないか
+                if(!Result.contains(".*:OK*.")){
+                    String url_link = Result.substring(0,Result.indexOf(":OK"));
+                    String print_text = url_link + "は適切に設定されています。";
+                    System.out.println(print_text);
+                }else if(!Result.contains(".*:NG*.")){
+                    String url_link = Result.substring(0,Result.indexOf(":NG"));
+                    String print_text = url_link +"は適切に設定されていません!";
+                    System.out.println(print_text);
+                }else{
+                    System.out.println("その他のエラーです");
+                }
+            }
+        }
     }
 
 }

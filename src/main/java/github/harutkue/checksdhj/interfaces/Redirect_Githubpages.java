@@ -11,13 +11,11 @@ import javax.naming.NamingException;
 public class Redirect_Githubpages implements Access_Templature_Interface {
     private static final Pattern GITHUB_PAGES = Pattern.compile(".*\\.github\\.io\\.?$");
     public boolean CheckMethods(String Domain){
-        System.out.println(GITHUB_PAGES);
         if(Domain != null){
             
             if (GITHUB_PAGES.matcher(Domain).matches()){
                 return true;
             }else{
-                System.out.println("Githubpagesではありません");
                 return false;
 
             }
@@ -39,9 +37,9 @@ public class Redirect_Githubpages implements Access_Templature_Interface {
 
             int responseCode = connection.getResponseCode();
             if(responseCode >= 200 && responseCode <400){
-                Return_Value = Access_Domain + "OK";
+                Return_Value = Access_Domain + ":OK";
             }else{
-                Return_Value = Access_Domain +"疎通確認できなかった";
+                Return_Value = Access_Domain +":NG";
             }
             return Return_Value;
 
