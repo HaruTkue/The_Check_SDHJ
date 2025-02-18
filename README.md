@@ -1,5 +1,5 @@
 サブドメインテイクオーバーに陥る可能性のある設定を確認するツールです。
-現状はhttpリクエストに対応しています。次はclouldflareについてです。
+Wordpress及びgithubpagesには対応しています。
 
 操作方法
 Main.javaを起動する。
