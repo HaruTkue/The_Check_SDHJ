@@ -3,17 +3,16 @@ package github.harutkue.checksdhj.interfaces;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
-import javax.naming.NamingException;
 
-public class Redirect_Githubpages implements Access_Templature_Interface {
-    private static final Pattern GITHUB_PAGES = Pattern.compile(".*\\.github\\.io\\.?$");
+public class redirectRender implements Access_Templature_Interface {
+    private static final Pattern WORD_PRESS = Pattern.compile(".*\\.onrender\\.com\\.?$");
     public boolean CheckMethods(String Domain){
-        if(Domain != null){
+
+        if(WORD_PRESS != null){
             
-            if (GITHUB_PAGES.matcher(Domain).matches()){
+            if (WORD_PRESS.matcher(Domain).matches()){
                 return true;
             }else{
                 return false;
@@ -39,7 +38,7 @@ public class Redirect_Githubpages implements Access_Templature_Interface {
             if(responseCode >= 200 && responseCode <400){
                 Return_Value = Access_Domain + ":OK";
             }else{
-                Return_Value = Access_Domain +":NG";
+                Return_Value = Access_Domain +":NO";
             }
             return Return_Value;
 

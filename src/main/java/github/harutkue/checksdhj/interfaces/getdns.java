@@ -3,8 +3,6 @@ package github.harutkue.checksdhj.interfaces;
 import java.io.IOException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.io.IOException;
 
 import org.xbill.DNS.*;
 import org.xbill.DNS.Record;
@@ -13,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import github.harutkue.checksdhj.interfaces.Providerlist;
 
 //Aレコードを取得するプログラム(CheckMethodsで用いる)
 public class getdns {

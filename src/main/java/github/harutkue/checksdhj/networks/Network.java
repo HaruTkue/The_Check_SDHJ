@@ -14,9 +14,11 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 import github.harutkue.checksdhj.interfaces.getdns;
+import github.harutkue.checksdhj.interfaces.redirectGithubpages;
+import github.harutkue.checksdhj.interfaces.redirectRender;
 import github.harutkue.checksdhj.interfaces.redirectWordpress;
 import github.harutkue.checksdhj.interfaces.redirectcf;
-import github.harutkue.checksdhj.interfaces.Redirect_Githubpages;
+import github.harutkue.checksdhj.interfaces.redirectGithubpages;
 import github.harutkue.checksdhj.interfaces.Redirect_Http;
 
 public class Network {
@@ -83,8 +85,9 @@ public class Network {
 
         //class_list.add(Redirect_Http.class);
 
-        class_list.add(Redirect_Githubpages.class);
+        class_list.add(redirectGithubpages.class);
         class_list.add(redirectWordpress.class);
+        class_list.add(redirectRender.class);
 
         return class_list;
     }
@@ -102,7 +105,6 @@ public class Network {
         }
         // 事前に処理結果を保存するリストを作成する。
         List<String> Access_Result = new ArrayList<>();
-        System.err.println(DoClassList);
         // 二重for文で適切なコードを検知する。 -CNAME上
         for (String CNAME : CNAME_list) {
             System.out.println("発見されたCNAME:" + CNAME);

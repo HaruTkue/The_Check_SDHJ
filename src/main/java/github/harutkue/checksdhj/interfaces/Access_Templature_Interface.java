@@ -1,7 +1,6 @@
 package github.harutkue.checksdhj.interfaces;
 
-import java.util.Map;
-import java.util.HashMap;
+
 import java.util.List;
 //Interfaceのみのやつ。
 //
