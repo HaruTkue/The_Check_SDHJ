@@ -1,8 +1,8 @@
-package github.harutkue.checksdhj.example;
+package github.harutkue.checksdhj.checksdhj;
 
 import java.util.Scanner;
 
-import github.harutkue.checksdhj.networks.Network;
+import github.harutkue.checksdhj.networks.network;
 
 
 
@@ -10,7 +10,7 @@ import github.harutkue.checksdhj.networks.Network;
 public class Main {
     public static void main(String[] args) {
         //作成
-        Network get_Connection = new Network();
+        network get_Connection = new network();
         Scanner scanner = new Scanner(System.in);
         System.out.println("確認を行うドメインを入力してください");
 

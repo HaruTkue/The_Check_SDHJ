@@ -19,9 +19,9 @@ import github.harutkue.checksdhj.interfaces.redirectRender;
 import github.harutkue.checksdhj.interfaces.redirectWordpress;
 import github.harutkue.checksdhj.interfaces.redirectcf;
 import github.harutkue.checksdhj.interfaces.redirectGithubpages;
-import github.harutkue.checksdhj.interfaces.Redirect_Http;
+import github.harutkue.checksdhj.interfaces.redirectHttp;
 
-public class Network {
+public class network {
     public void Get_CNAME(String CheckDomain) {
         List<String> CNAME_list = new ArrayList<String>();
         try {

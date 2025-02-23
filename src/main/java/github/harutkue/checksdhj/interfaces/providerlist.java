@@ -5,7 +5,7 @@ import java.util.Map;
 
 
 //Providerのリストを出す専用のクラス
-public class Providerlist {
+public class providerlist {
     public static Map<String,String> retProvider(){
         Map<String,String> ProviderList = new HashMap<>();
         //ここに追加するプロバイダを記述する。

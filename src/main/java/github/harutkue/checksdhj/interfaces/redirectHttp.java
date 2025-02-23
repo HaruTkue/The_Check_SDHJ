@@ -12,7 +12,7 @@ import javax.naming.directory.InitialDirContext;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class Redirect_Http implements Access_Templature_Interface {
+public class redirectHttp implements Access_Templature_Interface {
     
     public boolean CheckMethods(String Domain){
         ///debug

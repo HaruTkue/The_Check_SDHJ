@@ -7,3 +7,8 @@ Main.javaを起動する。
 調べるサブドメインを入力する。
 
 自動的にリスクを検知してくれる。
+
+対応サービス
+・GithubPages
+・wordpress
+・Render

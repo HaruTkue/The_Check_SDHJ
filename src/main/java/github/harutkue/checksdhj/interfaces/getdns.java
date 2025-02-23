@@ -51,7 +51,7 @@ public class getdns {
     }
     public static String getServiceProvider(String record){
         //プロバイダのマップ --キーと対応した値を返す。
-        Map<String,String> PROVIDERLIST = Providerlist.retProvider();
+        Map<String,String> PROVIDERLIST = providerlist.retProvider();
         for(Map.Entry<String,String> entry: PROVIDERLIST.entrySet()){
             //もし、取得したIPアドレスがの先頭部がプロバイダリストと一致するか
             if (record.startsWith(entry.getKey())){
