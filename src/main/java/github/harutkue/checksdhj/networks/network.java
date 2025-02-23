@@ -16,6 +16,7 @@ import java.net.URLClassLoader;
 import github.harutkue.checksdhj.interfaces.getdns;
 import github.harutkue.checksdhj.interfaces.redirectGithubpages;
 import github.harutkue.checksdhj.interfaces.redirectRender;
+import github.harutkue.checksdhj.interfaces.redirectVercel;
 import github.harutkue.checksdhj.interfaces.redirectWordpress;
 import github.harutkue.checksdhj.interfaces.redirectcf;
 import github.harutkue.checksdhj.interfaces.redirectGithubpages;
@@ -88,6 +89,7 @@ public class network {
         class_list.add(redirectGithubpages.class);
         class_list.add(redirectWordpress.class);
         class_list.add(redirectRender.class);
+        class_list.add(redirectVercel.class);
 
         return class_list;
     }
@@ -143,17 +145,22 @@ public class network {
 
     }
     public void printFunction(List<String> Access_Result){
+        //処理を変更
+        Pattern okcheck = Pattern.compile(".*:OK.*");
+        Pattern ngcheck = Pattern.compile(".*:NG.*");
         if (Access_Result.isEmpty()) {
             System.out.println("対応していないサービスです。");
         }else{
             for(String Result:Access_Result){
-
+                System.out.println(Result);
                 //疎通確認が正しくできたか、できてないか
-                if(!Result.contains(".*:OK*.")){
+                if(Result.contains(":OK")){
+                    System.out.println("OKだった場合の処理");
                     String url_link = Result.substring(0,Result.indexOf(":OK"));
                     String print_text = url_link + "は適切に設定されています。";
                     System.out.println(print_text);
-                }else if(!Result.contains(".*:NG*.")){
+                }else if(Result.contains(":NG")){
+                    System.out.println("NGだった場合の処理");
                     String url_link = Result.substring(0,Result.indexOf(":NG"));
                     String print_text = url_link +"は適切に設定されていません!";
                     System.out.println(print_text);
