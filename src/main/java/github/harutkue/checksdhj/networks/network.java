@@ -89,7 +89,7 @@ public class network {
         class_list.add(redirectGithubpages.class);
         class_list.add(redirectWordpress.class);
         class_list.add(redirectRender.class);
-        class_list.add(redirectVercel.class);
+        //適切に動作しない --おそらくリダイレクトとかのそういうやつ故?class_list.add(redirectVercel.class);
 
         return class_list;
     }
