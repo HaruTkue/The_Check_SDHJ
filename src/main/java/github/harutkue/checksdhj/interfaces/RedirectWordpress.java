@@ -3,18 +3,16 @@ package github.harutkue.checksdhj.interfaces;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
-import javax.naming.NamingException;
 
-public class redirectVercel implements Access_Templature_Interface {
-    //vercel-dns.com
-    private static final Pattern GITHUB_PAGES = Pattern.compile(".*\\.vercel\\.app\\.?$|.*\\.vercel-dns\\.com\\.?$");
+public class RedirectWordpress implements AccessTemplatureInterface {
+    private static final Pattern WORD_PRESS = Pattern.compile(".*\\.(wordpress\\.com|wpcomstaging\\.com)\\.?$");
     public boolean CheckMethods(String Domain){
-        if(Domain != null){
+
+        if(WORD_PRESS != null){
             
-            if (GITHUB_PAGES.matcher(Domain).matches()){
+            if (WORD_PRESS.matcher(Domain).matches()){
                 return true;
             }else{
                 return false;
@@ -23,9 +21,9 @@ public class redirectVercel implements Access_Templature_Interface {
         }
         return false;
     }
-    public String Main_Access(String Access_Domain){
-        String url ="http://" + Access_Domain;
-        String Return_Value;
+    public String MainAccess(String AccessDomain,String Domain){
+        String url ="http://" + AccessDomain;
+        String ReturnValue;
         try{
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
             connection.setRequestMethod("GET");
@@ -38,11 +36,11 @@ public class redirectVercel implements Access_Templature_Interface {
 
             int responseCode = connection.getResponseCode();
             if(responseCode >= 200 && responseCode <400){
-                Return_Value = Access_Domain + ":OK";
+                ReturnValue = AccessDomain + ":OK";
             }else{
-                Return_Value = Access_Domain +":NG";
+                ReturnValue = AccessDomain +":NO";
             }
-            return Return_Value;
+            return ReturnValue;
 
         }catch (Exception e){
             e.printStackTrace();

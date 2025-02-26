@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 
-public class redirectRender implements Access_Templature_Interface {
-    private static final Pattern WORD_PRESS = Pattern.compile(".*\\.onrender\\.com\\.?$");
+public class RedirectRender implements AccessTemplatureInterface {
+    private static final Pattern WORDPRESS = Pattern.compile(".*\\.onrender\\.com\\.?$");
     public boolean CheckMethods(String Domain){
 
-        if(WORD_PRESS != null){
+        if(WORDPRESS != null){
             
-            if (WORD_PRESS.matcher(Domain).matches()){
+            if (WORDPRESS.matcher(Domain).matches()){
                 return true;
             }else{
                 return false;
@@ -21,9 +21,9 @@ public class redirectRender implements Access_Templature_Interface {
         }
         return false;
     }
-    public String Main_Access(String Access_Domain){
-        String url ="http://" + Access_Domain;
-        String Return_Value;
+    public String MainAccess(String AccessDomain,String Domain){
+        String url ="http://" + AccessDomain;
+        String ReturnValue;
         try{
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
             connection.setRequestMethod("GET");
@@ -36,11 +36,11 @@ public class redirectRender implements Access_Templature_Interface {
 
             int responseCode = connection.getResponseCode();
             if(responseCode >= 200 && responseCode <400){
-                Return_Value = Access_Domain + ":OK";
+                ReturnValue = AccessDomain + ":OK";
             }else{
-                Return_Value = Access_Domain +":NO";
+                ReturnValue = AccessDomain +":NO";
             }
-            return Return_Value;
+            return ReturnValue;
 
         }catch (Exception e){
             e.printStackTrace();

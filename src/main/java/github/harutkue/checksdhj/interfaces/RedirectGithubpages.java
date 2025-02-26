@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 
-public class redirectWordpress implements Access_Templature_Interface {
-    private static final Pattern WORD_PRESS = Pattern.compile(".*\\.(wordpress\\.com|wpcomstaging\\.com)\\.?$");
-    public boolean CheckMethods(String Domain){
 
-        if(WORD_PRESS != null){
+public class RedirectGithubpages implements AccessTemplatureInterface {
+    private static final Pattern GITHUB_PAGES = Pattern.compile(".*\\.github\\.io\\.?$");
+    public boolean CheckMethods(String Domain){
+        if(Domain != null){
             
-            if (WORD_PRESS.matcher(Domain).matches()){
+            if (GITHUB_PAGES.matcher(Domain).matches()){
                 return true;
             }else{
                 return false;
@@ -21,9 +21,9 @@ public class redirectWordpress implements Access_Templature_Interface {
         }
         return false;
     }
-    public String Main_Access(String Access_Domain){
-        String url ="http://" + Access_Domain;
-        String Return_Value;
+    public String MainAccess(String AccessDomain,String Domain){
+        String url ="http://" + AccessDomain;
+        String ReturnValue;
         try{
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
             connection.setRequestMethod("GET");
@@ -36,11 +36,11 @@ public class redirectWordpress implements Access_Templature_Interface {
 
             int responseCode = connection.getResponseCode();
             if(responseCode >= 200 && responseCode <400){
-                Return_Value = Access_Domain + ":OK";
+                ReturnValue = AccessDomain + ":OK";
             }else{
-                Return_Value = Access_Domain +":NO";
+                ReturnValue = AccessDomain +":NG";
             }
-            return Return_Value;
+            return ReturnValue;
 
         }catch (Exception e){
             e.printStackTrace();

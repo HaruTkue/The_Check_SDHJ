@@ -12,7 +12,7 @@ import javax.naming.directory.InitialDirContext;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class redirectHttp implements Access_Templature_Interface {
+public class RedirectHttp implements AccessTemplatureInterface {
     
     public boolean CheckMethods(String Domain){
         ///debug
@@ -27,11 +27,11 @@ public class redirectHttp implements Access_Templature_Interface {
         }
         return false;
     }
-    public String Main_Access(String Access_Domain){
-        String url ="http://" + Access_Domain;
+    public String MainAccess(String AccessDomain,String Domain){
+        String url ="http://" + AccessDomain;
         
         System.out.println("検索するドメイン:"+ url);
-        String Return_Value;
+        String ReturnValue;
         try{
            
 
@@ -49,11 +49,11 @@ public class redirectHttp implements Access_Templature_Interface {
             System.out.println(connection.getResponseCode());
             int responseCode = connection.getResponseCode();
             if (responseCode >=200 && responseCode < 400){
-                Return_Value = Access_Domain+ "との疎通が取れました:http";
+                ReturnValue = AccessDomain+ "との疎通が取れました:http";
             }else{
-                Return_Value = Access_Domain+"疎通確認ができませんでした(リスクあり)";
+                ReturnValue = AccessDomain+"疎通確認ができませんでした(リスクあり)";
             }
-            return Return_Value;
+            return ReturnValue;
         }catch (Exception e){
             return "Error";
         }

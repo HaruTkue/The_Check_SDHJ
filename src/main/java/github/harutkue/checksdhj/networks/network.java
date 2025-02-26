@@ -13,14 +13,11 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-import github.harutkue.checksdhj.interfaces.getdns;
-import github.harutkue.checksdhj.interfaces.redirectGithubpages;
-import github.harutkue.checksdhj.interfaces.redirectRender;
-import github.harutkue.checksdhj.interfaces.redirectVercel;
-import github.harutkue.checksdhj.interfaces.redirectWordpress;
-import github.harutkue.checksdhj.interfaces.redirectcf;
-import github.harutkue.checksdhj.interfaces.redirectGithubpages;
-import github.harutkue.checksdhj.interfaces.redirectHttp;
+
+import github.harutkue.checksdhj.interfaces.RedirectGithubpages;
+import github.harutkue.checksdhj.interfaces.RedirectRender;
+import github.harutkue.checksdhj.interfaces.RedirectVercel;
+import github.harutkue.checksdhj.interfaces.RedirectWordpress;
 
 public class network {
     public void Get_CNAME(String CheckDomain) {
@@ -38,9 +35,8 @@ public class network {
                     CNAMERecord cname = (CNAMERecord) record;
                     String ToString = cname.getTarget().toString();
 
-                    CNAME_list.add(ToString);
+                    Search_prot(ToString,CheckDomain);
                 }
-                Search_prot(CNAME_list);
             } else {
                 // 存在していないことと恐らく脆弱性がなさそうであると報告する。
                 System.out.println("CNAMEが存在しませんでした:" + CheckDomain);
@@ -86,14 +82,15 @@ public class network {
 
         //class_list.add(Redirect_Http.class);
 
-        class_list.add(redirectGithubpages.class);
-        class_list.add(redirectWordpress.class);
-        class_list.add(redirectRender.class);
-        //適切に動作しない --おそらくリダイレクトとかのそういうやつ故?class_list.add(redirectVercel.class);
+        class_list.add(RedirectGithubpages.class);
+        class_list.add(RedirectWordpress.class);
+        class_list.add(RedirectRender.class);
+        class_list.add(RedirectVercel.class);
 
         return class_list;
     }
     //
+    /*
     public void Search_prot(List<String> CNAME_list) {
         // Interfacesを使用した Classを取得する
         List<Class<?>> DoClassList = new ArrayList<>();
@@ -115,19 +112,19 @@ public class network {
                 try {
                     // ここで整合性を確認する -インスタンスを作成
 
-                    Object Play_Instance = Check_Class.getDeclaredConstructor().newInstance();
+                    Object PlayInstance = Check_Class.getDeclaredConstructor().newInstance();
                     // インスタンス上でMethodsを実行
 
                     // methodを取得する。
                     Method Check_Method = Check_Class.getMethod("CheckMethods", String.class);
-                    boolean Check_Result = (boolean) Check_Method.invoke(Play_Instance, CNAME);
+                    boolean Check_Result = (boolean) Check_Method.invoke(PlayInstance, CNAME);
                     // 結果を取得する。
                     if (Check_Result) {
-                        Method Check_acess_Method = Check_Class.getMethod("Main_Access", String.class);
+                        Method Check_Access_Method = Check_Class.getMethod("MainAccess", String.class,String.class);
                         // 実行結果を文字列にする
-                        String Append_Acess_Result = (String) Check_acess_Method.invoke(Play_Instance, CNAME);
+                        String Append_Access_Result = (String) Check_Access_Method.invoke(PlayInstance, CNAME,null);
                         // リストにぶち込む。
-                        Access_Result.add(Append_Acess_Result);
+                        Access_Result.add(Append_Access_Result);
                     } else {
                         continue;
                     }
@@ -143,7 +140,55 @@ public class network {
         
         
 
+    }*/
+    public void Search_prot(String CNAME,String Domain) {
+        // Interfacesを使用した Classを取得する
+        List<Class<?>> DoClassList = new ArrayList<>();
+        try {
+            List<Class<?>> ClassList = Listic();
+            DoClassList = ClassList;
+        } catch (Exception e) {
+            // 適切に処理できなかった場合
+            e.printStackTrace();
+            System.out.println("Interface内のクラスを読み取ることができませんでした。");
+        }
+        // 事前に処理結果を保存するリストを作成する。
+        List<String> Access_Result = new ArrayList<>();
+        // 二重for文で適切なコードを検知する。 -CNAME上
+        System.out.println("発見されたCNAME:" + CNAME);
+            // それぞれとの適合を確認するためのやつ
+            for (Class<?> Check_Class : DoClassList) {
+                try {
+                    // ここで整合性を確認する -インスタンスを作成
+
+                    Object PlayInstance = Check_Class.getDeclaredConstructor().newInstance();
+                    // インスタンス上でMethodsを実行
+
+                    // methodを取得する。
+                    Method Check_Method = Check_Class.getMethod("CheckMethods", String.class);
+                    boolean Check_Result = (boolean) Check_Method.invoke(PlayInstance, CNAME);
+                    // 結果を取得する。
+                    if (Check_Result) {
+                        Method Check_Access_Method = Check_Class.getMethod("MainAccess", String.class,String.class);
+                        // 実行結果を文字列にする
+                        String Append_Access_Result = (String) Check_Access_Method.invoke(PlayInstance, CNAME,Domain);
+                        // リストにぶち込む。
+                        Access_Result.add(Append_Access_Result);
+                    } else {
+                        continue;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        //ここに判別用の処理を足す。
+        printFunction(Access_Result);
+        
+        
+
     }
+
     public void printFunction(List<String> Access_Result){
         //処理を変更
         Pattern okcheck = Pattern.compile(".*:OK.*");
