@@ -1,12 +1,14 @@
 package github.harutkue.checksdhj.interfaces;
 
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
-import java.net.http.HttpClient;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 public class RedirectVercel implements AccessTemplatureInterface {
     //vercel-dns.com
@@ -26,7 +28,18 @@ public class RedirectVercel implements AccessTemplatureInterface {
     public String MainAccess(String AccessDomain,String Domain){
         String url ="http://" + AccessDomain;
         String ReturnValue;
+        System.setProperty("jdk.httpclient.allowRestrictedHeaders", "host");
         try{
+            //処理部の変更
+            HttpClient client = HttpClient.newHttpClient();
+            URI uri = new URI(url);
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("User-Agent", "Java HttpClient")
+                .header("host",Domain)
+                .GET()
+                .build();
+            /* 
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
             connection.setRequestMethod("GET");
             connection.setConnectTimeout(6000);
@@ -36,7 +49,7 @@ public class RedirectVercel implements AccessTemplatureInterface {
             connection.setRequestProperty("User-Agent", "Mozilla/5.0");
             connection.setRequestProperty("Accept","application/json");
             connection.setRequestProperty("Host", "example.com");
-
+            
             //keyのデバッグ用
              for (Map.Entry<String, List<String>> entry : connection.getRequestProperties().entrySet()) {
             System.out.println(entry.getKey() + ": " + entry.getValue());
@@ -52,7 +65,17 @@ public class RedirectVercel implements AccessTemplatureInterface {
                 ReturnValue = AccessDomain +":NG";
             }
             return ReturnValue;
-
+            */
+        HttpResponse<String> response = client.send(request,HttpResponse.BodyHandlers.ofString());
+        //リターンをとる
+        int responseCode = response.statusCode();
+        if(responseCode >= 200 && responseCode <400){
+            ReturnValue = AccessDomain + ":OK";
+        }else{
+            ReturnValue = AccessDomain +":NG";
+        }
+        return ReturnValue;
+        
         }catch (Exception e){
             e.printStackTrace();
         }
