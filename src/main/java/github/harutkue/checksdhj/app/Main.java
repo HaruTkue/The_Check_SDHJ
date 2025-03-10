@@ -1,4 +1,4 @@
-package github.harutkue.checksdhj.checksdhj;
+package github.harutkue.checksdhj.app;
 
 import java.util.Scanner;
 
