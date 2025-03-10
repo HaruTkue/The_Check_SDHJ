@@ -1,4 +1,4 @@
-package github.harutkue.checksdhj.interfaces;
+package io.github.harutkue.checksdhj.interfaces;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 
-public class RedirectWordpress implements AccessTemplatureInterface {
-    private static final Pattern WORD_PRESS = Pattern.compile(".*\\.(wordpress\\.com|wpcomstaging\\.com)\\.?$");
-    public boolean CheckMethods(String Domain){
 
-        if(WORD_PRESS != null){
+public class RedirectGithubpages implements AccessTemplatureInterface {
+    private static final Pattern GITHUB_PAGES = Pattern.compile(".*\\.github\\.io\\.?$");
+    public boolean CheckMethods(String Domain){
+        if(Domain != null){
             
-            if (WORD_PRESS.matcher(Domain).matches()){
+            if (GITHUB_PAGES.matcher(Domain).matches()){
                 return true;
             }else{
                 return false;
@@ -38,7 +38,7 @@ public class RedirectWordpress implements AccessTemplatureInterface {
             if(responseCode >= 200 && responseCode <400){
                 ReturnValue = AccessDomain + ":OK";
             }else{
-                ReturnValue = AccessDomain +":NO";
+                ReturnValue = AccessDomain +":NG";
             }
             return ReturnValue;
 

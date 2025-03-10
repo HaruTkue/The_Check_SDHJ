@@ -1,4 +1,4 @@
-package github.harutkue.checksdhj.networks;
+package io.github.harutkue.checksdhj.networks;
 
 import org.xbill.DNS.*;
 import org.xbill.DNS.Record;
@@ -14,10 +14,10 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 
-import github.harutkue.checksdhj.interfaces.RedirectGithubpages;
-import github.harutkue.checksdhj.interfaces.RedirectRender;
-import github.harutkue.checksdhj.interfaces.RedirectVercel;
-import github.harutkue.checksdhj.interfaces.RedirectWordpress;
+import io.github.harutkue.checksdhj.interfaces.RedirectGithubpages;
+import io.github.harutkue.checksdhj.interfaces.RedirectRender;
+import io.github.harutkue.checksdhj.interfaces.RedirectVercel;
+import io.github.harutkue.checksdhj.interfaces.RedirectWordpress;
 
 public class network {
     public void Get_CNAME(String CheckDomain) {

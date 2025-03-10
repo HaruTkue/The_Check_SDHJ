@@ -1,4 +1,4 @@
-package github.harutkue.checksdhj.interfaces;
+package io.github.harutkue.checksdhj.interfaces;
 
 import java.net.HttpURLConnection;
 import java.net.URI;

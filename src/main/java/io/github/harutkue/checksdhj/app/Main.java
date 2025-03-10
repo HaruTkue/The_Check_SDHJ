@@ -1,8 +1,8 @@
-package github.harutkue.checksdhj.app;
+package io.github.harutkue.checksdhj.app;
 
 import java.util.Scanner;
 
-import github.harutkue.checksdhj.networks.network;
+import io.github.harutkue.checksdhj.networks.network;
 
 
 
