@@ -4,7 +4,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.regex.Pattern;
-
+import org.xbill.DNS.*;
+import org.xbill.DNS.Record;
 
 
 public class RedirectGithubpages implements AccessTemplatureInterface {
@@ -22,6 +23,7 @@ public class RedirectGithubpages implements AccessTemplatureInterface {
         return false;
     }
     public String MainAccess(String AccessDomain,String Domain){
+        System.out.println("githubpages確認処理開始");
         String url ="http://" + AccessDomain;
         String ReturnValue;
         try{
@@ -43,6 +45,7 @@ public class RedirectGithubpages implements AccessTemplatureInterface {
             return ReturnValue;
 
         }catch (Exception e){
+            System.out.println("Githubpages実装時のエラー");
             e.printStackTrace();
         }
         return "return";

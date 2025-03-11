@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import org.xbill.DNS.*;
+import org.xbill.DNS.Record;
 
 public class RedirectVercel implements AccessTemplatureInterface {
     //vercel-dns.com

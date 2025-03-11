@@ -4,7 +4,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.regex.Pattern;
-
+import org.xbill.DNS.*;
+import org.xbill.DNS.Record;
 
 public class RedirectRender implements AccessTemplatureInterface {
     private static final Pattern WORDPRESS = Pattern.compile(".*\\.onrender\\.com\\.?$");

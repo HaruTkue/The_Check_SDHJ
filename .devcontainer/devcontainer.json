@@ -1,0 +1,17 @@
+{
+  "name": "Java 21 Dev Environment",
+  "image": "mcr.microsoft.com/devcontainers/java:21",  // ここは変更なし
+  "features": {
+    "java": "21",  // Java 21 を指定
+    "maven": "latest"  // Maven を最新バージョンで指定
+  },
+  "settings": {
+    // "java.home" の設定は削除します
+  },
+  "extensions": [
+    "vscjava.vscode-java-pack",  // Java 開発用拡張
+    "redhat.java",  // Java サポート拡張
+    "ms-vscode.cpptools",  // C/C++ サポート
+    "vscjava.vscjava.vscode-java-debug"  // デバッガー拡張
+  ]
+}

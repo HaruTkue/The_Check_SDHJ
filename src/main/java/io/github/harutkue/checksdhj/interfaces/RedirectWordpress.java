@@ -4,7 +4,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.regex.Pattern;
-
+import org.xbill.DNS.*;
+import org.xbill.DNS.Record;
 
 public class RedirectWordpress implements AccessTemplatureInterface {
     private static final Pattern WORD_PRESS = Pattern.compile(".*\\.(wordpress\\.com|wpcomstaging\\.com)\\.?$");

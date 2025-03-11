@@ -2,7 +2,6 @@ package io.github.harutkue.checksdhj.networks;
 
 import org.xbill.DNS.*;
 import org.xbill.DNS.Record;
-import org.xbill.DNS.tools.primary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -170,7 +169,11 @@ public class network {
                     // 結果を取得する。
                     if (Check_Result) {
                         Method Check_Access_Method = Check_Class.getMethod("MainAccess", String.class,String.class);
+                        System.out.println(Check_Result);
+                        System.out.println(Check_Access_Method);
+                        System.out.println("String結果取得");
                         // 実行結果を文字列にする
+                        //ここでエラーが発生している。 しかもなぜか動かない。　そして、DNSJava不使用!
                         String Append_Access_Result = (String) Check_Access_Method.invoke(PlayInstance, CNAME,Domain);
                         // リストにぶち込む。
                         Access_Result.add(Append_Access_Result);
@@ -178,6 +181,7 @@ public class network {
                         continue;
                     }
                 } catch (Exception e) {
+                    System.out.println("適切な動きをしていない場合");
                     e.printStackTrace();
                 }
 
