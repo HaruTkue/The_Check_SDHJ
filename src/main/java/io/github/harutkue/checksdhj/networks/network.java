@@ -169,9 +169,7 @@ public class network {
                     // 結果を取得する。
                     if (Check_Result) {
                         Method Check_Access_Method = Check_Class.getMethod("MainAccess", String.class,String.class);
-                        System.out.println(Check_Result);
-                        System.out.println(Check_Access_Method);
-                        System.out.println("String結果取得");
+
                         // 実行結果を文字列にする
                         //ここでエラーが発生している。 しかもなぜか動かない。　そして、DNSJava不使用!
                         String Append_Access_Result = (String) Check_Access_Method.invoke(PlayInstance, CNAME,Domain);

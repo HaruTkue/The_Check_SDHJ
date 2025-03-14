@@ -23,7 +23,6 @@ public class RedirectGithubpages implements AccessTemplatureInterface {
         return false;
     }
     public String MainAccess(String AccessDomain,String Domain){
-        System.out.println("githubpages確認処理開始");
         String url ="http://" + AccessDomain;
         String ReturnValue;
         try{

@@ -2,7 +2,7 @@
   "name": "Java 21 Dev Environment",
   "image": "mcr.microsoft.com/devcontainers/java:21",  // ここは変更なし
   "features": {
-    "java": "21",  // Java 21 を指定
+    "java": "11",  // Java 21 を指定
     "maven": "latest"  // Maven を最新バージョンで指定
   },
   "settings": {
