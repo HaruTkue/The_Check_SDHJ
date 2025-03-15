@@ -23,7 +23,7 @@ public class RedirectRender implements AccessTemplatureInterface {
         return false;
     }
     public String MainAccess(String AccessDomain,String Domain){
-        String url ="http://" + AccessDomain;
+        String url ="https://" + AccessDomain;
         String ReturnValue;
         try{
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();

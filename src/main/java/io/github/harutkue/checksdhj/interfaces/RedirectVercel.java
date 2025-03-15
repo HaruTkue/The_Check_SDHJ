@@ -28,7 +28,7 @@ public class RedirectVercel implements AccessTemplatureInterface {
         return false;
     }
     public String MainAccess(String AccessDomain,String Domain){
-        String url ="http://" + AccessDomain;
+        String url ="https://" + AccessDomain;
         String ReturnValue;
         System.setProperty("jdk.httpclient.allowRestrictedHeaders", "host");
         try{

@@ -23,7 +23,8 @@ public class RedirectGithubpages implements AccessTemplatureInterface {
         return false;
     }
     public String MainAccess(String AccessDomain,String Domain){
-        String url ="http://" + AccessDomain;
+        String url ="https://" + AccessDomain;
+        System.out.println(url);
         String ReturnValue;
         try{
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
@@ -36,7 +37,8 @@ public class RedirectGithubpages implements AccessTemplatureInterface {
             connection.connect();
 
             int responseCode = connection.getResponseCode();
-            if(responseCode >= 200 && responseCode <400){
+            System.out.println(responseCode);
+            if(responseCode >= 200 && responseCode <400 ){
                 ReturnValue = AccessDomain + ":OK";
             }else{
                 ReturnValue = AccessDomain +":NG";
