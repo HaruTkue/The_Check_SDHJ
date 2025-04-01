@@ -1,4 +1,4 @@
-package io.github.harutkue.checksdhj.interfaces;
+package io.github.harutkue.checker.core.interfaces;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -7,13 +7,13 @@ import java.util.regex.Pattern;
 import org.xbill.DNS.*;
 import org.xbill.DNS.Record;
 
-public class RedirectWordpress implements AccessTemplatureInterface {
-    private static final Pattern WORD_PRESS = Pattern.compile(".*\\.(wordpress\\.com|wpcomstaging\\.com)\\.?$");
-    public boolean CheckMethods(String Domain){
 
-        if(WORD_PRESS != null){
+public class RedirectGithubpages implements AccessTemplatureInterface {
+    private static final Pattern GITHUB_PAGES = Pattern.compile(".*\\.github\\.io\\.?$");
+    public boolean CheckMethods(String Domain){
+        if(Domain != null){
             
-            if (WORD_PRESS.matcher(Domain).matches()){
+            if (GITHUB_PAGES.matcher(Domain).matches()){
                 return true;
             }else{
                 return false;
@@ -23,7 +23,8 @@ public class RedirectWordpress implements AccessTemplatureInterface {
         return false;
     }
     public String MainAccess(String AccessDomain,String Domain){
-        String url ="http://" + AccessDomain;
+        String url ="https://" + AccessDomain;
+        System.out.println(url);
         String ReturnValue;
         try{
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
@@ -36,14 +37,16 @@ public class RedirectWordpress implements AccessTemplatureInterface {
             connection.connect();
 
             int responseCode = connection.getResponseCode();
-            if(responseCode >= 200 && responseCode <400){
+            System.out.println(responseCode);
+            if(responseCode >= 200 && responseCode <400 ){
                 ReturnValue = AccessDomain + ":OK";
             }else{
-                ReturnValue = AccessDomain +":NO";
+                ReturnValue = AccessDomain +":NG";
             }
             return ReturnValue;
 
         }catch (Exception e){
+            System.out.println("Githubpages実装時のエラー");
             e.printStackTrace();
         }
         return "return";

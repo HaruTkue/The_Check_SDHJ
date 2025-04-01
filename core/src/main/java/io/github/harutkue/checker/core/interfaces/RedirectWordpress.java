@@ -1,4 +1,4 @@
-package io.github.harutkue.checksdhj.interfaces;
+package io.github.harutkue.checker.core.interfaces;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -7,13 +7,13 @@ import java.util.regex.Pattern;
 import org.xbill.DNS.*;
 import org.xbill.DNS.Record;
 
-public class RedirectRender implements AccessTemplatureInterface {
-    private static final Pattern WORDPRESS = Pattern.compile(".*\\.onrender\\.com\\.?$");
+public class RedirectWordpress implements AccessTemplatureInterface {
+    private static final Pattern WORD_PRESS = Pattern.compile(".*\\.(wordpress\\.com|wpcomstaging\\.com)\\.?$");
     public boolean CheckMethods(String Domain){
 
-        if(WORDPRESS != null){
+        if(WORD_PRESS != null){
             
-            if (WORDPRESS.matcher(Domain).matches()){
+            if (WORD_PRESS.matcher(Domain).matches()){
                 return true;
             }else{
                 return false;
@@ -23,7 +23,7 @@ public class RedirectRender implements AccessTemplatureInterface {
         return false;
     }
     public String MainAccess(String AccessDomain,String Domain){
-        String url ="https://" + AccessDomain;
+        String url ="http://" + AccessDomain;
         String ReturnValue;
         try{
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();

@@ -1,8 +1,9 @@
-package io.github.harutkue.checksdhj.app;
+package io.github.harutkue.checker.core.app;
 
 import java.util.Scanner;
 
-import io.github.harutkue.checksdhj.networks.network;
+//import io.github.harutkue.checker.core;
+import io.github.harutkue.checker.core.network.Network;
 
 
 
@@ -17,7 +18,7 @@ public class Main {
             System.out.println("適切な引数を指定できていません。");
             return;
         }*/
-        network get_Connection = new network();
+        Network get_Connection = new Network();
         //スキャナ類の処理はいったん使用しない。
         
         Scanner scanner = new Scanner(System.in);

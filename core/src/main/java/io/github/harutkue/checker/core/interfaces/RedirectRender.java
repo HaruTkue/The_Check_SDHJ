@@ -1,4 +1,4 @@
-package io.github.harutkue.checksdhj.interfaces;
+package io.github.harutkue.checker.core.interfaces;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -7,13 +7,13 @@ import java.util.regex.Pattern;
 import org.xbill.DNS.*;
 import org.xbill.DNS.Record;
 
-
-public class RedirectGithubpages implements AccessTemplatureInterface {
-    private static final Pattern GITHUB_PAGES = Pattern.compile(".*\\.github\\.io\\.?$");
+public class RedirectRender implements AccessTemplatureInterface {
+    private static final Pattern WORDPRESS = Pattern.compile(".*\\.onrender\\.com\\.?$");
     public boolean CheckMethods(String Domain){
-        if(Domain != null){
+
+        if(WORDPRESS != null){
             
-            if (GITHUB_PAGES.matcher(Domain).matches()){
+            if (WORDPRESS.matcher(Domain).matches()){
                 return true;
             }else{
                 return false;
@@ -24,7 +24,6 @@ public class RedirectGithubpages implements AccessTemplatureInterface {
     }
     public String MainAccess(String AccessDomain,String Domain){
         String url ="https://" + AccessDomain;
-        System.out.println(url);
         String ReturnValue;
         try{
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
@@ -37,16 +36,14 @@ public class RedirectGithubpages implements AccessTemplatureInterface {
             connection.connect();
 
             int responseCode = connection.getResponseCode();
-            System.out.println(responseCode);
-            if(responseCode >= 200 && responseCode <400 ){
+            if(responseCode >= 200 && responseCode <400){
                 ReturnValue = AccessDomain + ":OK";
             }else{
-                ReturnValue = AccessDomain +":NG";
+                ReturnValue = AccessDomain +":NO";
             }
             return ReturnValue;
 
         }catch (Exception e){
-            System.out.println("Githubpages実装時のエラー");
             e.printStackTrace();
         }
         return "return";

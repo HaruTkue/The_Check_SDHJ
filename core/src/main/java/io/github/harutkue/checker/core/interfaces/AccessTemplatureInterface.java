@@ -1,4 +1,4 @@
-package io.github.harutkue.checksdhj.interfaces;
+package io.github.harutkue.checker.core.interfaces;
 
 
 import java.util.List;
