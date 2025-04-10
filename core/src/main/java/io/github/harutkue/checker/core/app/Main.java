@@ -2,6 +2,7 @@ package io.github.harutkue.checker.core.app;
 
 import java.util.Scanner;
 
+import io.github.harutkue.checker.core.checker.Core;
 //import io.github.harutkue.checker.core;
 import io.github.harutkue.checker.core.network.Network;
 
@@ -13,12 +14,14 @@ public class Main {
         //DNSjavaが適切に動作しないケースがあるため。
         System.setProperty("jdk.net.hostresolver", "org.xbill.DNS.spi.DnsjavaInetAddressResolverProvider");
         //作成
+        /*
         /* 
         if(args.length ==0){
             System.out.println("適切な引数を指定できていません。");
             return;
         }*/
         Network get_Connection = new Network();
+        Core newGetConnection =new Core();
         //スキャナ類の処理はいったん使用しない。
         
         Scanner scanner = new Scanner(System.in);
@@ -27,15 +30,11 @@ public class Main {
         String CheckDomain = scanner.nextLine();
         System.out.println(CheckDomain + "の設定を検索します。");
         scanner.close();
-        /*
-        for(String target:args){
-            System.out.println("指定されたサブドメイン:" + target);
-            //cnameを取得する
-            String CheckDomain = target;
-            get_Connection.Get_CNAME(CheckDomain);
-        }*/
+
         //デバッグ用
         get_Connection.Get_CNAME(CheckDomain);
+        newGetConnection.GetRequestValue(CheckDomain);
+        
     }
 
 }
