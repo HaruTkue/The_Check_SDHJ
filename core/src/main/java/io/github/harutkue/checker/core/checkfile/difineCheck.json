@@ -1,9 +1,0 @@
-[
-    {
-        "Name": "GithubPages",
-        "PassStatus": true,
-        "CNAMEIdentifier":[".*\\.github\\.io\\.?$"],
-        "ARecordIdentifier":["11111.111.1"]
-    }
-
-]
