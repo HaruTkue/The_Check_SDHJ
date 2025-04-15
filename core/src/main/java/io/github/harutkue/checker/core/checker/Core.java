@@ -5,11 +5,13 @@ import org.xbill.DNS.Record;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -27,15 +29,19 @@ import org.json.JSONArray;
 public class Core {
     public <T> void GetRequestValue(T DomainData){
         //テスト用のやつ
+        List<String> ReturnList = new ArrayList<>();
         System.out.println("value:"+ DomainData.toString());
         //どのような型が設定されているかを判別する
         if(DomainData instanceof String) {
             //文字列型の場合(単独データの場合)
             CheckerRecords Record = GetCnameRecord(DomainData.toString());
             System.out.println(Record);
-            String Anser = OneSearch(Record);
-
-            System.out.println(Anser);
+            //解釈用のList化
+            List<String> ViaList = new ArrayList<>();
+            ViaList.add(OneSearch(Record));
+            
+            ListCreate(ViaList);
+            
             //OneSearch
         }else if (DomainData instanceof List<?>){
             //複数のドメインを同時で調べる場合 - eTLD対応
@@ -92,7 +98,8 @@ public class Core {
     //検知機能本体-単独用
     public String OneSearch(CheckerRecords CheckDatas){
         //単独用の検知処理
-        String RetrunValue="";
+        String RetrunValue=null;
+
         try{
             //JSONから検知用データの取得
             InputStream IS = Core.class.getClassLoader().getResourceAsStream("checkfile/DifineCheck.json");
@@ -126,26 +133,55 @@ public class Core {
                 ///
                 /// そもそもpattern判定からはじくケースを作成する -->多分ここにねじ込んだほうが早い;
                 /// 
-                if(SearchNet(CheckDatas,new CheckServiceRecords(ServiceName,CheckValues))){
-                    //正しいと判定してパスする
-                    System.out.println("分岐T");
-                    continue;
-                }else{
-                    //正しくないと判定して、ダメというデータを返す。
-                    System.out.println("分岐F");
-                    RetrunValue = CheckDatas.DomainData()+":NG";
-                    
-                    return RetrunValue;
+                JSONArray CheckPatterns  = CheckValues;
+                
+                //サービスのそれぞれの奴と合致するかどうかを確かめる。
+                for(int j=0; j<CheckValues.length(); j++){
+                    //パターンが合致するかどうかを確かめる。
+                    Pattern CHECKPATTERN =Pattern.compile(CheckPatterns.getString(j));
+                    //
+                    if(CheckDatas.Record() != null){
+                        if(CHECKPATTERN.matcher(CheckDatas.Record()).matches()){
+                            //パターンがマッチした場合に次の処理に移る。
+                            System.out.println("--------パターンマッチ完了------");
+                            String CheckStr = CheckPatterns.getString(j);
+                            System.out.println(CheckStr);
+                            String Value = SerachAns2(CheckDatas);
+                            //デバッグ出力
+                            System.out.println(Value);
+                            RetrunValue = Value;
+                        }else{
+                            //Debug
+                            System.out.println("定義ファイルpass");
+                            continue;
+                        }
+                    }else{
+                        System.out.println("レコードがないよ!");
+                    }
+                }
 
+                //もしも、ReturnValueが存在する場合に返り血として出す。
+                if (RetrunValue != null){
+                    System.out.println("返す値が存在している状態");
+                    return RetrunValue;
                 }
             }
             //チェックし終わった場合に、結果を作成する
-            RetrunValue = CheckDatas.DomainData()+":OK";
+            //RetrunValue = CheckDatas.DomainData()+":OK";
+
+
+            //結果が存在する場合に
         }catch(IOException e){
             e.printStackTrace();
         }
+        System.out.println("正しく処理ができていない場合");
+        
+        
+        //すべてが終了した際に、引数をぶち返すやつ。
         return null;
     }
+
+    //いらないこ
     public Boolean SearchNet(CheckerRecords CheckDatas,CheckServiceRecords ServiceDatas){
         //検知処理を実行する
         JSONArray CheckPatterns  = ServiceDatas.SerivcePattern();
@@ -164,8 +200,10 @@ public class Core {
             String DomainRecord = CheckDatas.DomainData().replaceAll("\\.$","");
             String url ="https://" + DomainRecord;
             System.out.println(url);
+
             try{
                 //HttpClientの作成
+                
                 HttpClient client = HttpClient.newHttpClient();
                 URI uri = new URI(url);
                 //Requestの作成
@@ -187,41 +225,106 @@ public class Core {
                 }
             }catch (Exception e){
                 e.printStackTrace();
+                System.out.println("正しく処理されていないケース");
             }
         }
         return true;
     }
-    public Boolean Serach(CheckerRecords CheckDatas , CheckServiceRecords ServiceDatas){
-        ///
-        /// ここからjava.netを活用してステータスコードを取得する処理
-        /// 
-        String DomainRecord = CheckDatas.DomainData().replaceAll("\\.$","");
-        String url ="https://" + DomainRecord;
+
+    //新しい検索処理 javanetを活用したステータス取得
+    //特にホスト名を設定した検知方法
+
+    public String SearchAns1(CheckerRecords CheckData){
+        System.out.println("サーチ処理に移行");
+        System.out.println(CheckData);
+        String CheckDomainRecord = CheckData.Record().replaceAll("\\.$","");
+        //url作成
+        String url ="https://" +CheckDomainRecord;
+        String RetrunValue;
         System.out.println(url);
         try{
-            //HttpClientの作成
+            System.out.println("-----------ネットワーク部----------");
             HttpClient client = HttpClient.newHttpClient();
             URI uri = new URI(url);
-            //Requestの作成
-            System.setProperty("jdk.httpclient.allowRestrictedHeaders", "host");
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(uri)
-                    .header("User-Agent","Java HttpClient")
-                    .header("host",CheckDatas.DomainData())
-                    .GET()
-                    .build();
-                //Responseの取得
-                HttpResponse<String> response = client.send(request,HttpResponse.BodyHandlers.ofString());
-                int ResponseCode = response.statusCode();
-                //httpのステータスから判定する
-                if(ResponseCode >= 200 && ResponseCode <400){
-                    return true;
-                }else{
-                    return false;
-                }
-            }catch (Exception e){
-                e.printStackTrace();
+                .uri(uri)
+                .header("User-Agent", "Java HttpClient")
+                .header("host", CheckData.DomainData())
+                .GET()
+                .build();
+            HttpResponse<String> response = client.send(request,HttpResponse.BodyHandlers.ofString());
+            //ステータスコードを取る
+            int responseCode = response.statusCode();
+            System.out.println(responseCode);
+            
+            if(responseCode >= 200 && responseCode < 400){
+                RetrunValue = CheckData.DomainData() +":OK";
+            }else{
+                RetrunValue = CheckData.DomainData() +":NG";
             }
+            return RetrunValue;
+            
+        }catch(Exception e){
+            e.getStackTrace();
+            System.out.println("---------------適切に動かず終了----");
+            return null;
+        }
+        
+    }
+    //予備で作成--
+    public String SerachAns2(CheckerRecords CheckData){
+        System.out.println("Ans2の処理を実行------------------");
+        String CheckDomainRecord = CheckData.Record().replaceAll("\\.$","");
+        String ReturnValue;
+        String url = "https://" + CheckDomainRecord;
+        try{
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(6000);
+            connection.setReadTimeout(5000);
+            connection.setInstanceFollowRedirects(true);
+
+            //アクセス処理
+            connection.connect();
+            int responseCode = connection.getResponseCode();
+            //レスポンスコードによる判定
+            if(responseCode >= 200 && responseCode <400){
+                ReturnValue = CheckDomainRecord + ":OK";
+            }else{
+                ReturnValue = CheckDomainRecord+":NG";
+            }
+            return ReturnValue;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //特殊条件のケースでの検知処理
+
+
+
+    //出力結果を再解析し、形式を変更する。
+    public List<List<String>> ListCreate(List<String> Result){
+        //考える箇所・結局データ構造どうすんねん
+        List<List<String>> DataList = new ArrayList<List<String>>();
+        System.out.println(DataList);
+        //形式を再解釈する。
+        for(int i=0; i < Result.size(); i++){
+            //二回ぐらい使うかもしれんからとっ得
+            String Value = Result.get(i);
+            List<String> ResultRecord =new ArrayList <String>();
+            //Okの箇所とそれ以外を切り離す。
+            if(Value.contains(":OK")){
+                String FirstValue= Value.substring(0, Result.indexOf(":OK"));
+                boolean SecondValue = true;
+            }else if(Value.contains(":NG")){
+
+            }else{
+                //例外発生
+            }
+
+        }
         return null;
     }
 }

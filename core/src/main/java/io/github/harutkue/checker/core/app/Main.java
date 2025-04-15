@@ -31,8 +31,11 @@ public class Main {
         System.out.println(CheckDomain + "の設定を検索します。");
         scanner.close();
 
+
+        
         //デバッグ用
         get_Connection.Get_CNAME(CheckDomain);
+        System.out.println("------------------------------------");
         newGetConnection.GetRequestValue(CheckDomain);
         
     }

@@ -3,12 +3,12 @@
         "Name": "GithubPages",
         "PassStatus": true,
         "CNAMEIdentifier":[".*\\.github\\.io\\.?$"],
-        "ARecordIdentifier":["11111.111.1"]
+        "ARecordIdentifier":["185.199.108.153"]
     },
     {
         "Name": "WorldPress",
         "PassStatus": true,
         "CNAMEIdentifier":[".*\\.(wordpress\\.com|wpcomstaging\\.com)\\.?$"],
-        "ARecordIdentifier":["11111.111.1"]
+        "ARecordIdentifier":["192.168.11.14"]
     }
 ]

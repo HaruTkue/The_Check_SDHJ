@@ -19,7 +19,7 @@ public class Main {
             Scanner scanner = new Scanner(System.in);
             String CheckDomain = scanner.nextLine();
 
-
+            System.out.println("--------------------------------");
             //この箇所にeTLD取得を記述していく。また、その結果をリストに保存して受け渡す。
             //メソッドの実行 --既存のプログラムでは 第一引数のみを指定する。
             GetAns.Get_CNAME(CheckDomain);
