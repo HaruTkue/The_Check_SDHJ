@@ -323,12 +323,12 @@ public class Core {
             if (Value.contains(":OK")) {
                 System.out.println(Value);
                 //バグ--切り取りがうまくいっていない
-                FirstValue = Value.substring(0, Result.indexOf(":OK"));
+                FirstValue = Value.substring(0, Value.indexOf(":OK"));
                 SecondValue = true;
                 // Hashmapで FirstValueをkeyに,結果をvalueとして保存する。
                 ValueRecord.put(FirstValue, SecondValue);
             } else if (Value.contains(":NG")) {
-                FirstValue = Value.substring(0, Result.indexOf(":NG"));
+                FirstValue = Value.substring(0, Value.indexOf(":NG"));
                 SecondValue = false;
                 // Hashmapで FirstValueをkeyに,結果をvalueとして保存する。
                 ValueRecord.put(FirstValue, SecondValue);
