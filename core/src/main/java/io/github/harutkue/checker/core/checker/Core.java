@@ -25,7 +25,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 public class Core {
-    public <T> void GetRequestValue(T DomainData) {
+    public List<HashMap<String,Boolean>> GetRequestValue(Object DomainData) {
         // テスト用のやつ
         List<HashMap<String,Boolean>> ReturnList = new ArrayList<>();
         System.out.println("value:" + DomainData.toString());
@@ -41,11 +41,32 @@ public class Core {
 
             System.out.println(ReturnList);
             // OneSearch
-        } else if (DomainData instanceof List<?>) {
-            // 複数のドメインを同時で調べる場合 - eTLD対応
-        }
 
-        //return ReturnList;
+        } else if (DomainData instanceof List<?> MultiDomainList) {
+            // 複数のドメインを同時で調べる場合 - eTLD対応
+            List<String> AnsToList = new ArrayList<>();
+            System.out.println("複数ドメイン対応");
+            //ドメインリストの回数分実行する。
+            for (Object CheckDomains : MultiDomainList){
+                int count = 0;
+                System.out.println("複数探知処理-----");
+                //ここにマルチで使用する際のドメインを入力していく。
+                String CheckDomainsData = CheckDomains.toString();
+                //CheckerRecords 
+                CheckerRecords Record = GetCnameRecord(CheckDomainsData);
+                System.out.println(Record);
+                List<String> ViaList =new ArrayList<>();
+                //Error
+                ViaList.add(OneSearch(Record));
+                System.out.println("count:"+count+ViaList);
+                AnsToList.add(ViaList.get(0));
+                //値を取り出す処理は完了 --今後はそれのリスト化などを行う。
+            }
+            ReturnList = ListCreate(AnsToList);
+            //ループ処理が終了した場合に
+            return ReturnList;
+        }
+        return ReturnList;
 
     }
 
@@ -55,8 +76,8 @@ public class Core {
         try {
             Lookup lookup = new Lookup(DomainData, Type.CNAME);
             lookup.run();
-
-            // CNAMEレコードが見つかった場合
+            //バグ なぜかAレコード判定が発生する
+            // CNAMEレコードが見つかった場合 
             if (lookup.getResult() == Lookup.SUCCESSFUL) {
                 Record[] records = lookup.getAnswers();
                 for (Record record : records) {
@@ -130,7 +151,6 @@ public class Core {
                     CheckValues = CheckService.getJSONArray("CNAMEIdentifier");
                     System.out.println(CheckValues);
                 } else if (CheckDatas.RecordType() == "A") {
-
                 } else {
 
                 }
@@ -138,7 +158,7 @@ public class Core {
                 /// そもそもpattern判定からはじくケースを作成する -->多分ここにねじ込んだほうが早い;
                 ///
                 JSONArray CheckPatterns = CheckValues;
-
+                System.out.println(CheckPatterns);
                 // サービスのそれぞれの奴と合致するかどうかを確かめる。
                 for (int j = 0; j < CheckValues.length(); j++) {
                     // パターンが合致するかどうかを確かめる。
@@ -183,56 +203,31 @@ public class Core {
         return null;
     }
 
-    // いらないこ
-    public Boolean SearchNet(CheckerRecords CheckDatas, CheckServiceRecords ServiceDatas) {
-        // 検知処理を実行する
-        JSONArray CheckPatterns = ServiceDatas.SerivcePattern();
-        for (int i = 0; i < CheckPatterns.length(); i++) {
-            // パターンを生成する
-            Pattern CHECKPATTERN = Pattern.compile(CheckPatterns.getString(i));
-            // パターンとCNAMEレコード/Aレコードが合致しているか
-            if (CHECKPATTERN.matcher(CheckDatas.Record()).matches()) {
 
-            } else {
+    //検知処理本体 -複数データ用
+    public String MultiSearch(CheckerRecords CheckData){
+        String ReturnValue =null;
+        //定義ファイルを取得する
+        try{
+            InputStream IS = Core.class.getClassLoader().getResourceAsStream("checkfile/DifineCheck.json");
+            String JsonString = new String(IS.readAllBytes(), StandardCharsets.UTF_8);
+            JSONArray CheckList = new JSONArray(JsonString);
+            int CheckCount = CheckList.length();
+
+            //取得したJSONファイルをぐるぐる回す。
+            for(int i=0; i < CheckCount; i++){
+                JSONObject CheckService = CheckList.getJSONObject(i);
+                //文字列
+                String ServiceName =CheckService.getString("Name");
+                JSONArray CheckValues=null;
+
 
             }
-            ///
-            /// ここからjava.netを活用してステータスコードを取得する処理
-            ///
-            String DomainRecord = CheckDatas.DomainData().replaceAll("\\.$", "");
-            String url = "https://" + DomainRecord;
-            System.out.println(url);
-
-            try {
-                // HttpClientの作成
-
-                HttpClient client = HttpClient.newHttpClient();
-                URI uri = new URI(url);
-                // Requestの作成
-                System.setProperty("jdk.httpclient.allowRestrictedHeaders", "host");
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(uri)
-                        .header("User-Agent", "Java HttpClient")
-                        .header("host", CheckDatas.DomainData())
-                        .GET()
-                        .build();
-                // Responseの取得
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                int ResponseCode = response.statusCode();
-                // httpのステータスから判定する
-                if (ResponseCode >= 200 && ResponseCode < 400) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("正しく処理されていないケース");
-            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
-        return true;
+        return ReturnValue;
     }
-
     // 新しい検索処理 javanetを活用したステータス取得
     // 特にホスト名を設定した検知方法
 
@@ -268,7 +263,7 @@ public class Core {
 
         } catch (Exception e) {
             e.getStackTrace();
-            System.out.println("---------------適切に動かず終了----");
+            System.out.println("ネットワーク部の処理にエラー発生");
             return null;
         }
 
@@ -334,6 +329,7 @@ public class Core {
                 ValueRecord.put(FirstValue, SecondValue);
             } else {
                 // 例外発生
+                System.out.println("適切なデータ形式ではありません");
             }
             //作成した ValueRecordをListにぶち込む
             DataList.add(ValueRecord);

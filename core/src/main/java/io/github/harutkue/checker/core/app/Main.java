@@ -1,5 +1,8 @@
 package io.github.harutkue.checker.core.app;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 import io.github.harutkue.checker.core.checker.Core;
@@ -33,11 +36,28 @@ public class Main {
 
 
         
-        //デバッグ用
-        get_Connection.Get_CNAME(CheckDomain);
-        System.out.println("------------------------------------");
-        newGetConnection.GetRequestValue(CheckDomain);
-        
+        //単独のテストケース
+        System.out.println("単体データ------------------------------------");
+        //リストを作成
+        List<HashMap<String,Boolean>> AnswerList = new ArrayList<>();
+        AnswerList = newGetConnection.GetRequestValue(CheckDomain);
+        System.out.println(AnswerList);
+        //出力用のクラス
+
+
+
+
+
+        //複数データのテスト
+        System.out.println("複数データ--------------------------");
+        List<String> TestData = new ArrayList<>();
+        TestData.add("harugpg.shinchokudonan.com");
+        TestData.add("harugpg.shinchokudonan.com");
+        TestData.add("harugpg.shinchokudonan.com");
+        TestData.add("harugpg.shinchokudonan.com");
+        TestData.add("harugpg.shinchokudonan.com");
+        AnswerList = newGetConnection.GetRequestValue(TestData);
+        System.out.println(AnswerList);
     }
 
 }
