@@ -92,6 +92,8 @@ public class Core {
         } catch (TextParseException e) {
             // 処理に不具合が発生した。
             e.printStackTrace();
+            System.out.println("正しいドメインが入力されていません");
+            System.exit(0);
             return null;
         }
         return null;
@@ -111,10 +113,15 @@ public class Core {
                     String ToString = A.getName().toString();
                     return new CheckerRecords(ToString, "A", DomainData);
                 }
+            }else{
+                //その他の形式は自動的にはじく
+                return new CheckerRecords(null, "null", DomainData);
             }
         } catch (TextParseException e) {
             // 不具合発生時に送るやつ
             e.printStackTrace();
+            System.out.println("正しいドメインが入力されていません");
+            System.exit(0);
             return null;
         }
         return null;
@@ -147,12 +154,18 @@ public class Core {
                 Boolean SerivcePattern = CheckService.getBoolean("PassStatus");
                 // Check処理に受け渡す専用のCheck用データ
                 JSONArray CheckValues = null;
+                System.out.println(CheckDatas.Record());
+                System.out.println(CheckDatas.RecordType());
+                //InvaildData が見つかった場合に処理をパスするやつ
+
+                //レコードのタイプを図る -何も取得できなかった場合にパスするようにする
                 if (CheckDatas.RecordType() == "CNAME") {
                     CheckValues = CheckService.getJSONArray("CNAMEIdentifier");
                     System.out.println(CheckValues);
                 } else if (CheckDatas.RecordType() == "A") {
+                    CheckValues = CheckService.getJSONArray("ARecordIdentifier");
                 } else {
-
+                    //不明なケース
                 }
                 ///
                 /// そもそもpattern判定からはじくケースを作成する -->多分ここにねじ込んだほうが早い;
@@ -160,10 +173,15 @@ public class Core {
                 JSONArray CheckPatterns = CheckValues;
                 System.out.println(CheckPatterns);
                 // サービスのそれぞれの奴と合致するかどうかを確かめる。
+                //CheckValuesがnullの場合にはじく
+                if(CheckValues == null){
+                    continue;
+                }
                 for (int j = 0; j < CheckValues.length(); j++) {
                     // パターンが合致するかどうかを確かめる。
                     Pattern CHECKPATTERN = Pattern.compile(CheckPatterns.getString(j));
                     //
+                    
                     if (CheckDatas.Record() != null) {
                         if (CHECKPATTERN.matcher(CheckDatas.Record()).matches()) {
                             // パターンがマッチした場合に次の処理に移る。
@@ -203,31 +221,6 @@ public class Core {
         return null;
     }
 
-
-    //検知処理本体 -複数データ用
-    public String MultiSearch(CheckerRecords CheckData){
-        String ReturnValue =null;
-        //定義ファイルを取得する
-        try{
-            InputStream IS = Core.class.getClassLoader().getResourceAsStream("checkfile/DifineCheck.json");
-            String JsonString = new String(IS.readAllBytes(), StandardCharsets.UTF_8);
-            JSONArray CheckList = new JSONArray(JsonString);
-            int CheckCount = CheckList.length();
-
-            //取得したJSONファイルをぐるぐる回す。
-            for(int i=0; i < CheckCount; i++){
-                JSONObject CheckService = CheckList.getJSONObject(i);
-                //文字列
-                String ServiceName =CheckService.getString("Name");
-                JSONArray CheckValues=null;
-
-
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return ReturnValue;
-    }
     // 新しい検索処理 javanetを活用したステータス取得
     // 特にホスト名を設定した検知方法
 
@@ -287,9 +280,9 @@ public class Core {
             int responseCode = connection.getResponseCode();
             // レスポンスコードによる判定
             if (responseCode >= 200 && responseCode < 400) {
-                ReturnValue = CheckDomainRecord + ":OK";
+                ReturnValue = CheckData.DomainData() + ":OK";
             } else {
-                ReturnValue = CheckDomainRecord + ":NG";
+                ReturnValue = CheckData.DomainData() + ":NG";
             }
             return ReturnValue;
         } catch (Exception e) {
@@ -315,6 +308,10 @@ public class Core {
             boolean SecondValue;
             HashMap<String, Boolean> ValueRecord = new HashMap<String, Boolean>();
             // Okの箇所とそれ以外を切り離す。
+            if(Value == null){
+                //空のデータを出された場合にはじく処理
+                continue;
+            }
             if (Value.contains(":OK")) {
                 System.out.println(Value);
                 //バグ--切り取りがうまくいっていない

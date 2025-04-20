@@ -1,6 +1,7 @@
 [
     {
         "Name": "GithubPages",
+        "ServiceHost": "github.io",
         "PassStatus": true,
         "CNAMEIdentifier":[".*\\.github\\.io\\.?$"],
         "ARecordIdentifier":["185.199.108.153"]
