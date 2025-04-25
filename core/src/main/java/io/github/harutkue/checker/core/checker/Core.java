@@ -93,7 +93,6 @@ public class Core {
             // 処理に不具合が発生した。
             e.printStackTrace();
             System.out.println("正しいドメインが入力されていません");
-            System.exit(0);
             return null;
         }
         return null;
@@ -154,10 +153,13 @@ public class Core {
                 Boolean SerivcePattern = CheckService.getBoolean("PassStatus");
                 // Check処理に受け渡す専用のCheck用データ
                 JSONArray CheckValues = null;
-                System.out.println(CheckDatas.Record());
-                System.out.println(CheckDatas.RecordType());
+                //System.out.println(CheckDatas.Record());
+                //System.out.println(CheckDatas.RecordType());
                 //InvaildData が見つかった場合に処理をパスするやつ
-
+                //nullあるデータがあったら殺す
+                if(CheckDatas == null){
+                    continue;
+                }
                 //レコードのタイプを図る -何も取得できなかった場合にパスするようにする
                 if (CheckDatas.RecordType() == "CNAME") {
                     CheckValues = CheckService.getJSONArray("CNAMEIdentifier");
