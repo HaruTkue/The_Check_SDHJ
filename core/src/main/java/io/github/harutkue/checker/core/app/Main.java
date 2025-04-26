@@ -23,7 +23,6 @@ public class Main {
             System.out.println("適切な引数を指定できていません。");
             return;
         }*/
-        Network get_Connection = new Network();
         Core newGetConnection =new Core();
         //スキャナ類の処理はいったん使用しない。
         

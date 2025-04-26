@@ -8,6 +8,7 @@
         <groupId>io.github.harutkue.checker</groupId>
         <artifactId>sdhjchecker</artifactId>
         <version>1.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>core</artifactId>

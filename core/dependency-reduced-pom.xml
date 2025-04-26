@@ -22,6 +22,9 @@
               <transformers>
                 <transformer>
                   <mainClass>io.github.harutkue.checksdhj.app.Main</mainClass>
+                  <manifestEntries>
+                    <Multi-Release>true</Multi-Release>
+                  </manifestEntries>
                 </transformer>
                 <transformer />
               </transformers>
