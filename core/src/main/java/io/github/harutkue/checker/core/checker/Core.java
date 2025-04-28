@@ -52,8 +52,16 @@ public class Core {
                 System.out.println("複数探知処理-----");
                 //ここにマルチで使用する際のドメインを入力していく。
                 String CheckDomainsData = CheckDomains.toString();
-                //CheckerRecords 
-                CheckerRecords Record = GetCnameRecord(CheckDomainsData);
+                //CheckerRecords
+                //ここでnull対策
+                CheckerRecords Record = null;
+                //debug
+                System.out.println(CheckDomainsData);
+                if(CheckDomainsData == "" | CheckDomainsData == null){
+                    continue;
+                }else{
+                Record = GetCnameRecord(CheckDomainsData);
+                }
                 System.out.println(Record);
                 List<String> ViaList =new ArrayList<>();
                 //Error
