@@ -58,6 +58,8 @@ public class Main {
         TestData.add("harugpg.shinchokudonan.com");
         AnswerList = newGetConnection.GetRequestValue(TestData);
         System.out.println(AnswerList);
+
+        
     }
 
 }
