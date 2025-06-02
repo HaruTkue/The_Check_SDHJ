@@ -1,12 +1,20 @@
 package io.github.harutkue.checker.cli.app;
 import io.github.harutkue.checker.core.checker.Core;
 
+import java.security.KeyStore.Entry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
+        //color定義
+        public static final String RESETCOLOR ="\u001B[0m";
+        public static final String REDCOLOR = "\u001B[31m";
+        public static final String GREENCOLOR = "\u001B[32m";
+        
+        //Main
         public static void main(String[] args){
             System.out.println("SDHJChecker CLIです。");
             System.out.println("単独検知:1 複数検知:2 終了:その他のkey");
@@ -14,13 +22,15 @@ public class Main {
             //CLI開発
             Scanner scan = new Scanner(System.in);
             String ActInput = scan.nextLine();
+            
+            System.out.println(ActInput);
             //処理の分岐
-            if(ActInput == "1"){
-                scan.close();
+            if(ActInput.equals("1")){
+                
                 System.out.println("単独検知処理に移ります");
                 OneSearch();
-            }else if(ActInput == "2"){
-                scan.close();
+            }else if(ActInput.equals("2")){
+                
                 System.out.println("複数検知処理に移ります");
                 MultiSearch();
             }else{
@@ -38,6 +48,7 @@ public class Main {
             }*/
             //実際の入出力の受け取りは args --デバッグ用としてScannerを使用。
             //デバッグ用入力受け取り
+            /*
             Scanner scanner = new Scanner(System.in);
             String CheckDomain = scanner.nextLine();
 
@@ -47,7 +58,9 @@ public class Main {
             List<HashMap<String,Boolean>> AnswerList = new ArrayList<>();
             
             System.out.println(AnswerList);
+            */
     }
+
     public static void OneSearch(){
         //単独での検知処理
         System.out.println("検知したいサブドメインを入力してください");
@@ -60,8 +73,15 @@ public class Main {
         AnswerList = newGetConnection.GetRequestValue(CheckDomain);
         //取得処理
         for (HashMap<String,Boolean> Data : AnswerList){
-            String AnswerURI = Data.getKey();
-            Boolean AnswerBoolean = Data.get("SecondValue");
+            Map.Entry<String,Boolean> EntryValue = Data.entrySet().iterator().next();
+            String AnswerUri = EntryValue.getKey();
+            Boolean Ans = EntryValue.getValue();
+            //if文で出力を変える
+            if (Ans){
+                System.out.println(GREENCOLOR + AnswerUri + "は正常に設定されています" +RESETCOLOR);
+            }else{
+                System.out.println(REDCOLOR + AnswerUri + "は正常に設定されていません!" +RESETCOLOR);
+            }
 
         }
     }
