@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class Main {
         //color定義
@@ -85,9 +86,36 @@ public class Main {
 
         }
     }
+    //誤入力をはじく専用のやつ
+    private static final Pattern SubDomainPattern = Pattern.compile("^[a-z]+\\.[a-z]+\\.[a-z]+$");
+    private static final Pattern DomainPattern = Pattern.compile("^[a-z]+\\.[a-z]+\\.[a-z]+$");
     public static void MultiSearch(){
         //複数での検知処理
+        System.out.println("検知を行いたいサブドメインを入力してください");
+        System.out.println("入力を終了したい場合には0を入力してください");
         Scanner scanner = new Scanner(System.in);
+        
+        List<String> CheckDomains = new ArrayList<>();
+        Core newGetConnection =new Core(); 
+        List<HashMap<String,Boolean>> AnswerList = new ArrayList<>();
+        String CheckDomain;
+
+        //0が入力されるまで繰り返す。
+        do{
+            //処理の形式が正式であるかを確認する。
+            CheckDomain = scanner.nextLine();
+            //おなやみ:現状の入力状況を出力しようかな
+            if((SubDomainPattern.matcher(CheckDomain)).matches()||(DomainPattern.matcher(CheckDomain)).matches()){
+                //適合している
+                CheckDomains.add(CheckDomain);
+            }else{
+                //不適合
+                System.out.println("適切な形式で入力してください");
+            }
+
+        } while (CheckDomain != "0");
+        //結果を取得する
+        AnswerList = newGetConnection.GetRequestValue(CheckDomains);
         scanner.close();
     }
 }
