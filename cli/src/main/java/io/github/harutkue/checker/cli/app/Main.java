@@ -108,14 +108,33 @@ public class Main {
             if((SubDomainPattern.matcher(CheckDomain)).matches()||(DomainPattern.matcher(CheckDomain)).matches()){
                 //適合している
                 CheckDomains.add(CheckDomain);
+                System.out.println("正しく入力されました。");
+            }else if(CheckDomain .equals("0")){
+                //終了
+                break;
             }else{
                 //不適合
                 System.out.println("適切な形式で入力してください");
             }
 
-        } while (CheckDomain != "0");
+        } while (true);
         //結果を取得する
         AnswerList = newGetConnection.GetRequestValue(CheckDomains);
         scanner.close();
+
+        //結果出力
+        for (HashMap<String,Boolean> Data : AnswerList){
+            Map.Entry<String,Boolean> EntryValue = Data.entrySet().iterator().next();
+            String AnswerUri = EntryValue.getKey();
+            Boolean Ans = EntryValue.getValue();
+            //if文で出力を変える
+            if (Ans){
+                System.out.println(GREENCOLOR + AnswerUri + "は正常に設定されています" +RESETCOLOR);
+            }else{
+                System.out.println(REDCOLOR + AnswerUri + "は正常に設定されていません!" +RESETCOLOR);
+            }
+
+        }
+
     }
 }
