@@ -1,0 +1,15 @@
+[
+    {
+        "Name": "GithubPages",
+        "ServiceHost": "github.io",
+        "PassStatus": true,
+        "CNAMEIdentifier":[".*\\.github\\.io\\.?$"],
+        "ARecordIdentifier":["185.199.108.153"]
+    },
+    {
+        "Name": "WorldPress",
+        "PassStatus": true,
+        "CNAMEIdentifier":[".*\\.(wordpress\\.com|wpcomstaging\\.com)\\.?$"],
+        "ARecordIdentifier":["192.168.11.14"]
+    }
+]
