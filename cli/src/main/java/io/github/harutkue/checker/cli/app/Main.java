@@ -123,6 +123,7 @@ public class Main {
         scanner.close();
 
         //結果出力
+        System.out.println("------------結果-----------");
         for (HashMap<String,Boolean> Data : AnswerList){
             Map.Entry<String,Boolean> EntryValue = Data.entrySet().iterator().next();
             String AnswerUri = EntryValue.getKey();

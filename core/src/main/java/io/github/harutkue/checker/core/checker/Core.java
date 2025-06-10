@@ -28,28 +28,28 @@ public class Core {
     public List<HashMap<String,Boolean>> GetRequestValue(Object DomainData) {
         // テスト用のやつ
         List<HashMap<String,Boolean>> ReturnList = new ArrayList<>();
-        System.out.println("value:" + DomainData.toString());
+        //System.out.println("value:" + DomainData.toString());
         // どのような型が設定されているかを判別する
         if (DomainData instanceof String) {
             // 文字列型の場合(単独データの場合)
             CheckerRecords Record = GetCnameRecord(DomainData.toString());
-            System.out.println(Record);
+            //System.out.println(Record);
             // 解釈用のList化
             List<String> ViaList = new ArrayList<>();
             ViaList.add(OneSearch(Record));
             ReturnList = ListCreate(ViaList);
 
-            System.out.println(ReturnList);
+            //System.out.println(ReturnList);
             // OneSearch
 
         } else if (DomainData instanceof List<?> MultiDomainList) {
             // 複数のドメインを同時で調べる場合 - eTLD対応
             List<String> AnsToList = new ArrayList<>();
-            System.out.println("複数ドメイン対応");
+            //System.out.println("複数ドメイン対応");
             //ドメインリストの回数分実行する。
             for (Object CheckDomains : MultiDomainList){
                 int count = 0;
-                System.out.println("複数探知処理-----");
+                //("複数探知処理-----");
                 //ここにマルチで使用する際のドメインを入力していく。
                 String CheckDomainsData = CheckDomains.toString();
                 //CheckerRecords
@@ -149,8 +149,8 @@ public class Core {
             // 検知処理に移行
             // 要素数を取得して検知する
             int CheckCount = CheckList.length();
-            System.out.println(CheckList);
-            System.out.println(CheckCount);
+            //System.out.println(CheckList);
+            //System.out.println(CheckCount);
             // JSONにあるすべてのサービスとの整合をチェックする。
             for (int i = 0; i < CheckCount; i++) {
                 // 繰り返しでパターンを取得する。
@@ -171,7 +171,7 @@ public class Core {
                 //レコードのタイプを図る -何も取得できなかった場合にパスするようにする
                 if (CheckDatas.RecordType() == "CNAME") {
                     CheckValues = CheckService.getJSONArray("CNAMEIdentifier");
-                    System.out.println(CheckValues);
+                    //System.out.println(CheckValues);
                 } else if (CheckDatas.RecordType() == "A") {
                     CheckValues = CheckService.getJSONArray("ARecordIdentifier");
                 } else {
@@ -181,7 +181,7 @@ public class Core {
                 /// そもそもpattern判定からはじくケースを作成する -->多分ここにねじ込んだほうが早い;
                 ///
                 JSONArray CheckPatterns = CheckValues;
-                System.out.println(CheckPatterns);
+                //System.out.println(CheckPatterns);
                 // サービスのそれぞれの奴と合致するかどうかを確かめる。
                 //CheckValuesがnullの場合にはじく
                 if(CheckValues == null){
@@ -195,12 +195,12 @@ public class Core {
                     if (CheckDatas.Record() != null) {
                         if (CHECKPATTERN.matcher(CheckDatas.Record()).matches()) {
                             // パターンがマッチした場合に次の処理に移る。
-                            System.out.println("--------パターンマッチ完了------");
+                            //System.out.println("--------パターンマッチ完了------");
                             String CheckStr = CheckPatterns.getString(j);
-                            System.out.println(CheckStr);
+                            //System.out.println(CheckStr);
                             String Value = SerachAns2(CheckDatas);
                             // デバッグ出力
-                            System.out.println(Value);
+                            //System.out.println(Value);
                             RetrunValue = Value;
                         } else {
                             // Debug
@@ -214,7 +214,7 @@ public class Core {
 
                 // もしも、ReturnValueが存在する場合に返り血として出す。
                 if (RetrunValue != null) {
-                    System.out.println("返す値が存在している状態");
+                    //System.out.println("返す値が存在している状態");
                     return RetrunValue;
                 }
             }
@@ -235,15 +235,15 @@ public class Core {
     // 特にホスト名を設定した検知方法
 
     public String SearchAns1(CheckerRecords CheckData) {
-        System.out.println("サーチ処理に移行");
-        System.out.println(CheckData);
+        //System.out.println("サーチ処理に移行");
+        //System.out.println(CheckData);
         String CheckDomainRecord = CheckData.Record().replaceAll("\\.$", "");
         // url作成
         String url = "https://" + CheckDomainRecord;
         String RetrunValue;
-        System.out.println(url);
+        //System.out.println(url);
         try {
-            System.out.println("-----------ネットワーク部----------");
+            //System.out.println("-----------ネットワーク部----------");
             HttpClient client = HttpClient.newHttpClient();
             URI uri = new URI(url);
             HttpRequest request = HttpRequest.newBuilder()
@@ -255,7 +255,7 @@ public class Core {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             // ステータスコードを取る
             int responseCode = response.statusCode();
-            System.out.println(responseCode);
+            //System.out.println(responseCode);
 
             if (responseCode >= 200 && responseCode < 400) {
                 RetrunValue = CheckData.DomainData() + ":OK";
@@ -274,7 +274,7 @@ public class Core {
 
     // 予備で作成--
     public String SerachAns2(CheckerRecords CheckData) {
-        System.out.println("Ans2の処理を実行------------------");
+        //System.out.println("Ans2の処理を実行------------------");
         String CheckDomainRecord = CheckData.Record().replaceAll("\\.$", "");
         String ReturnValue;
         String url = "https://" + CheckDomainRecord;
@@ -308,7 +308,7 @@ public class Core {
     public List<HashMap<String, Boolean>> ListCreate(List<String> Result) {
         // 考える箇所・結局データ構造どうすんねん
         List<HashMap<String, Boolean>> DataList = new ArrayList<HashMap<String, Boolean>>();
-        System.out.println(DataList);
+        //System.out.println(DataList);
         // 形式を再解釈する。
         for (int i = 0; i < Result.size(); i++) {
             // 二回ぐらい使うかもしれんからとっ得
@@ -323,7 +323,7 @@ public class Core {
                 continue;
             }
             if (Value.contains(":OK")) {
-                System.out.println(Value);
+                //System.out.println(Value);
                 //バグ--切り取りがうまくいっていない
                 FirstValue = Value.substring(0, Value.indexOf(":OK"));
                 SecondValue = true;
