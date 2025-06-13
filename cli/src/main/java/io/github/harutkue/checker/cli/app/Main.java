@@ -15,8 +15,18 @@ public class Main {
         public static final String REDCOLOR = "\u001B[31m";
         public static final String GREENCOLOR = "\u001B[32m";
         
+        private static final Pattern SubDomainPattern = Pattern.compile("^[a-z]+\\.[a-z]+\\.[a-z]+$");
+        private static final Pattern DomainPattern = Pattern.compile("^[a-z]+\\.[a-z]+\\.[a-z]+$");
+
         //Main
         public static void main(String[] args){
+            if(args.length == 1){
+                System.out.println("検知処理を実行します。");
+                String CheckDomain = args[0];
+                //検知処理
+                //不正なデータの場合は終了する
+                SingleCLISearch(CheckDomain);
+            }else{
             System.out.println("SDHJChecker CLIです。");
             System.out.println("単独検知:1 複数検知:2 終了:その他のkey");
             
@@ -59,7 +69,7 @@ public class Main {
             List<HashMap<String,Boolean>> AnswerList = new ArrayList<>();
             
             System.out.println(AnswerList);
-            */
+        */}
     }
 
     public static void OneSearch(){
@@ -87,8 +97,7 @@ public class Main {
         }
     }
     //誤入力をはじく専用のやつ
-    private static final Pattern SubDomainPattern = Pattern.compile("^[a-z]+\\.[a-z]+\\.[a-z]+$");
-    private static final Pattern DomainPattern = Pattern.compile("^[a-z]+\\.[a-z]+\\.[a-z]+$");
+
     public static void MultiSearch(){
         //複数での検知処理
         System.out.println("検知を行いたいサブドメインを入力してください");
@@ -136,6 +145,30 @@ public class Main {
             }
 
         }
+
+    }
+    public static void SingleCLISearch(String CheckDomain){
+        //CLI上で直予備の時
+        if((SubDomainPattern.matcher(CheckDomain)).matches()||(DomainPattern.matcher(CheckDomain)).matches()){
+        Core newGetConnection =new Core(); 
+        List<HashMap<String,Boolean>> AnswerList = new ArrayList<>();
+        AnswerList = newGetConnection.GetRequestValue(CheckDomain);
+        //取得処理
+        for (HashMap<String,Boolean> Data : AnswerList){
+            Map.Entry<String,Boolean> EntryValue = Data.entrySet().iterator().next();
+            String AnswerUri = EntryValue.getKey();
+            Boolean Ans = EntryValue.getValue();
+            //if文で出力を変える
+            if (Ans){
+                System.out.println(GREENCOLOR + AnswerUri + "は正常に設定されています" +RESETCOLOR);
+            }else{
+                System.out.println(REDCOLOR + AnswerUri + "は正常に設定されていません!" +RESETCOLOR);
+            }
+        }
+        }else{
+            System.out.println("正しいサブドメインが指定されていません");
+        }
+
 
     }
 }
