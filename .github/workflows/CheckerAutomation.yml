@@ -1,0 +1,49 @@
+name: Automation Add
+
+on:
+  pull_request:
+    types:
+     - opened
+
+jobs:
+  get-request:
+    name: Automation
+    runs-on: ubuntu-latest
+    
+    steps: 
+      - name: Get PullRequestData
+        #サブドメインをプルリク内から取得する
+        #取得したサブドメインをDEFAULT_DOMAINに格納
+        run: |
+         DOMAIN = ${{ github.event.pull_request.title }}
+         echo  "DEFAULT_DOMAIN = $DOMAIN">> $GITHUB_ENV
+         
+      - name: Get DNSRecord
+        #取得したサブドメインからCNAME/Aレコードを取得する
+        run: |
+         Record = $(dig CNAME DEFAULT_DOMAIN)
+         echo "RECORD =${Record}" >>$GITHUB_ENV
+      #ホスト名を指定したリクエスト送信
+      #curlコマンド
+      - name: TRequest
+        run: |
+         TrueServiceRequest = $(curl -s -o -w "%{http_code}" RECORD )
+         echo "TRUE_STATUS_CODE = TrueServiceRequest" >> $GITHUB_ENV
+      #-Hを使用し、ホストに雑なものをぶち込む
+      - name: FRequest
+        run: |
+         FalseServiceRequest = $(curl -s -o -w "%{http_code}" RECORD )
+         echo "FALSE_STATUS_CODE = FALSEServiceRequest" >> $GITHUB_ENV
+      #-JSONにデータを追加するかの判定を行う。なお、TR/FRの結果が違う際に追加
+      - name: Json Update
+        if: TRUE_STATUS_CODE != FALSE_STATUS_CODE 
+      #JSON内にデータを追加する
+          
+        
+         
+         
+        
+
+    
+    
+  
