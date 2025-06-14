@@ -35,11 +35,14 @@ jobs:
          FalseServiceRequest = $(curl -s -o -w "%{http_code}" RECORD )
          echo "FALSE_STATUS_CODE = FALSEServiceRequest" >> $GITHUB_ENV
       #-JSONにデータを追加するかの判定を行う。なお、TR/FRの結果が違う際に追加
-      - name: Json Update
+      - name: Data orthopaedy
         if: TRUE_STATUS_CODE != FALSE_STATUS_CODE 
-      #JSON内にデータを追加する
-          
-        
+      #検知可能なのでレコードから正規表現のデータを作成
+      #pythonで実装したものを実行
+        run: |
+          data = $(python3 <<EOF
+test = "${RECORD}"
+count = test.count(".")
          
          
         
