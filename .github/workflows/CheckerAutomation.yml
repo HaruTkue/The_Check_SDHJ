@@ -15,35 +15,58 @@ jobs:
         #サブドメインをプルリク内から取得する
         #取得したサブドメインをDEFAULT_DOMAINに格納
         run: |
-         DOMAIN = ${{ github.event.pull_request.title }}
-         echo  "DEFAULT_DOMAIN = $DOMAIN">> $GITHUB_ENV
+         DOMAIN=${{ github.event.pull_request.title }}
+         echo "DEFAULT_DOMAIN=$DOMAIN" >> $GITHUB_ENV
          
       - name: Get DNSRecord
         #取得したサブドメインからCNAME/Aレコードを取得する
         run: |
-         Record = $(dig CNAME DEFAULT_DOMAIN)
-         echo "RECORD =${Record}" >>$GITHUB_ENV
+         RECORD=$(dig +short CNAME "$DEFAULT_DOMAIN")
+         echo "RECORD=$RECORD" >>$GITHUB_ENV
       #ホスト名を指定したリクエスト送信
       #curlコマンド
       - name: TRequest
         run: |
-         TrueServiceRequest = $(curl -s -o -w "%{http_code}" RECORD )
-         echo "TRUE_STATUS_CODE = TrueServiceRequest" >> $GITHUB_ENV
+         RESPONSE = $(curl -s -o -w "%{http_code}" -H "Host: $DEFAULT_DOMAIN" $RECORD )
+         echo "TRUE_STATUS_CODE = $RESPONSE" >> $GITHUB_ENV
       #-Hを使用し、ホストに雑なものをぶち込む
       - name: FRequest
         run: |
-         FalseServiceRequest = $(curl -s -o -w "%{http_code}" RECORD )
+         FalseServiceRequest = $(curl -s -o -w "%{http_code}" -H"Host: example.com" $RECORD )
          echo "FALSE_STATUS_CODE = FALSEServiceRequest" >> $GITHUB_ENV
       #-JSONにデータを追加するかの判定を行う。なお、TR/FRの結果が違う際に追加
       - name: Data orthopaedy
-        if: TRUE_STATUS_CODE != FALSE_STATUS_CODE 
+        if: ${{env.TRUE_STATUS_CODE != env.FALSE_STATUS_CODE}} 
       #検知可能なのでレコードから正規表現のデータを作成
       #pythonで実装したものを実行
         run: |
-          data = $(python3 <<EOF
-test = "${RECORD}"
-count = test.count(".")
-         
+          data=$(RECORD="$RECORD" python3 <<EOF
+          import os
+          record = os.environ["RECORD"]
+          count = record.count(".")
+          #データの正規表現化
+          TempData=""
+          flag=True
+          if(count >= 2):
+            for i in range(0,len(record)):
+              if((record[i] ==".")and (flag)):
+                TempData="^[a-z]+\\\."
+                flag= False
+              else:
+                if(record[i] == "."):
+                  TempData = TempData +"\\\."
+                else:
+                  TempData = TempData+record[i]
+          else:
+            for i in range(0,len(record)):
+              if(record[i] =="."):
+                TempData = TempData + "\\\."
+              else:
+                TempData = TempData + record[i]
+          print(TempData)
+          EOF)
+          echo "SETDATA=$data" >> $GITHUB_ENV
+          
          
         
 
