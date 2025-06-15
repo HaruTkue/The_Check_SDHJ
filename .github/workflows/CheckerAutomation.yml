@@ -7,6 +7,7 @@ on:
 
 jobs:
   get-request:
+    if: ${{ github.event.pull_request.title}} == 'AddService'
     name: Automation
     runs-on: ubuntu-latest
     
@@ -15,32 +16,35 @@ jobs:
         #サブドメインをプルリク内から取得する
         #取得したサブドメインをDEFAULT_DOMAINに格納
         run: |
-         DOMAIN=${{ github.event.pull_request.title }}
+         DOMAIN=${{ github.event.pull_request.body }}
          echo "DEFAULT_DOMAIN=$DOMAIN" >> $GITHUB_ENV
+         
          
       - name: Get DNSRecord
         #取得したサブドメインからCNAME/Aレコードを取得する
         run: |
          RECORD=$(dig +short CNAME "$DEFAULT_DOMAIN")
+         A_RECORD=$(dig +short CNAME "DEFAULT_DOMAIN")
          echo "RECORD=$RECORD" >>$GITHUB_ENV
+         echo "A_RECORD=$RECORD" >>$GITHUB_ENV
       #ホスト名を指定したリクエスト送信
       #curlコマンド
       - name: TRequest
         run: |
-         RESPONSE = $(curl -s -o -w "%{http_code}" -H "Host: $DEFAULT_DOMAIN" $RECORD )
-         echo "TRUE_STATUS_CODE = $RESPONSE" >> $GITHUB_ENV
+         RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -H "Host: $DEFAULT_DOMAIN" "$RECORD")
+         echo "TRUE_STATUS_CODE=$RESPONSE" >> $GITHUB_ENV
       #-Hを使用し、ホストに雑なものをぶち込む
       - name: FRequest
         run: |
-         FalseServiceRequest = $(curl -s -o -w "%{http_code}" -H"Host: example.com" $RECORD )
-         echo "FALSE_STATUS_CODE = FALSEServiceRequest" >> $GITHUB_ENV
+         RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -H "Host: example.com" "$RECORD") 
+         echo "FALSE_STATUS_CODE=$RESPONSE" >> $GITHUB_ENV
       #-JSONにデータを追加するかの判定を行う。なお、TR/FRの結果が違う際に追加
       - name: Data orthopaedy
         if: ${{env.TRUE_STATUS_CODE != env.FALSE_STATUS_CODE}} 
       #検知可能なのでレコードから正規表現のデータを作成
       #pythonで実装したものを実行
         run: |
-          data=$(RECORD="$RECORD" python3 <<EOF
+          data=$( python3 <<EOF
           import os
           record = os.environ["RECORD"]
           count = record.count(".")
@@ -64,12 +68,51 @@ jobs:
               else:
                 TempData = TempData + record[i]
           print(TempData)
-          EOF)
+          EOF
+          )
           echo "SETDATA=$data" >> $GITHUB_ENV
+      #JSONファイル内に同様のデータがないかを確認する
+      - name: JSON Check
+        run: |
+          FILE="./core/src/main/resources/checkfile/DifineCheck.json"
+          NEW_RECORD ="$SETDATE"
+          NEW_A_RECORD="$"
           
-         
-        
+          CNAME_EXISTS=$(jq --arg pattern "$NEW_RECORD" '[.[] | .CNAMEIdentifier[]] any(test($pattern)' "$FILE"
+          ARECORD_EXISTS=$(jq --arg value "$NEW_RECORD" '[.[] | .ARecordIdentifier[]] | any(. == $value)' "$FILE")
+          if [ "$CNAME_EXISTS" = "true" ] || [ "ARECORD_EXISTS" = "true" ]; then
+            echo "存在しています。"
+          else
+            echo"サービスを追加します。"
+            NEW_ENTRY=$(jq -n \
+              --arg cname "NEW_RECORD"\
+              --arg arecord "$NEW_A_RECORD" \
+              '{
+                Name: "Automationed",
+                ServiceHost: "",
+                PassStatus: false,
+                CNAMEIdentifer: [$cname],
+                ARecordIdentifier: [$arecord]
+              }'
+            )
 
+            TMP=$(mktemp)
+            jq ". += [$NEW_ENTRY]" "$FILE" > "$TMP" && mv "$TMP" "$FILE"
+            echo "追加したんやで～ $FILE"
+          fi
+      - name: Java Setup
+        uses: actions/setup-java@v4
+        with: 
+          distribution: 'temurin'
+          java-version: '21'
+          
+      - name: Java Compile And Result
+        run: |
+          mvn clean package
+          #Javaを実行する
+          RESULT=$(java -jar cli/target/cli-flat.jar "$DEFAULT_DOMAIN")
+          echo "CHECK_RESULT=$RESULT" >> $GITHUB_ENV
+        
     
     
   
