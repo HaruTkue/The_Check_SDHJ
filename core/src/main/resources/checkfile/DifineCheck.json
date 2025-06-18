@@ -7,9 +7,15 @@
         "ARecordIdentifier":["185.199.108.153"]
     },
     {
-        "Name": "WorldPress",
-        "PassStatus": true,
+        "Name": "wordPress",
+        "PassStatus": false,
         "CNAMEIdentifier":[".*\\.(wordpress\\.com|wpcomstaging\\.com)\\.?$"],
-        "ARecordIdentifier":["192.168.11.14"]
+        "ARecordIdentifier":["192.168.11.14"],
+        "fingerprint": "doesn't exist"
+    },
+    {
+        "Name": "Vercel",
+        "PassStatus": true,
+        "CNAMEIdentifier":[".*\\.vercel\\.app\\.?$|.*\\.vercel-dns\\.com\\.?$"]
     }
 ]
