@@ -24,19 +24,19 @@ jobs:
         #取得したサブドメインからCNAME/Aレコードを取得する
         run: |
          RECORD=$(dig +short CNAME "$DEFAULT_DOMAIN")
-         A_RECORD=$(dig +short CNAME "DEFAULT_DOMAIN")
+         A_RECORD=$(dig +short A "$DEFAULT_DOMAIN")
          echo "RECORD=$RECORD" >>$GITHUB_ENV
-         echo "A_RECORD=$RECORD" >>$GITHUB_ENV
+         echo "A_RECORD=$A_RECORD" >>$GITHUB_ENV
       #ホスト名を指定したリクエスト送信
       #curlコマンド
       - name: TRequest
         run: |
-         RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -H "Host: $DEFAULT_DOMAIN" "$RECORD")
+         RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -H "Host: $DEFAULT_DOMAIN" "https://$RECORD")
          echo "TRUE_STATUS_CODE=$RESPONSE" >> $GITHUB_ENV
       #-Hを使用し、ホストに雑なものをぶち込む
       - name: FRequest
         run: |
-         RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -H "Host: example.com" "$RECORD") 
+         RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -H "Host: example.com" "https://$RECORD") 
          echo "FALSE_STATUS_CODE=$RESPONSE" >> $GITHUB_ENV
       #-JSONにデータを追加するかの判定を行う。なお、TR/FRの結果が違う際に追加
       - name: Data orthopaedy
@@ -51,67 +51,55 @@ jobs:
           #データの正規表現化
           TempData=""
           flag=True
-          if(count >= 2):
+          if count >= 2:
             for i in range(0,len(record)):
-              if((record[i] ==".")and (flag)):
-                TempData="^[a-z]+\\\."
+              if record[i] =="." and flag:
+                TempData = "^[a-z]+\\\." #この部分では前文字列を正規表現化するため =　で正しい。
                 flag= False
+              elif record[i] == ".":
+                TempData += "\\\."
               else:
-                if(record[i] == "."):
-                  TempData = TempData +"\\\."
-                else:
-                  TempData = TempData+record[i]
+                TempData += record[i]
           else:
             for i in range(0,len(record)):
-              if(record[i] =="."):
-                TempData = TempData + "\\\."
+              if record[i] =="." :
+                TempData += "\\\."
               else:
-                TempData = TempData + record[i]
-          print(TempData)
+                TempData += record[i]
+          print(TempData, end="")
           EOF
           )
           echo "SETDATA=$data" >> $GITHUB_ENV
       #JSONファイル内に同様のデータがないかを確認する
       - name: JSON Check
         run: |
-          FILE="./core/src/main/resources/checkfile/DifineCheck.json"
-          NEW_RECORD ="$SETDATE"
-          NEW_A_RECORD="$"
+          FILE="./core/src/main/resources/checkfile/DefineCheck.json"
+          NEW_RECORD="$SETDATA"
+          NEW_A_RECORD="$A_RECORD"
           
-          CNAME_EXISTS=$(jq --arg pattern "$NEW_RECORD" '[.[] | .CNAMEIdentifier[]] any(test($pattern)' "$FILE"
-          ARECORD_EXISTS=$(jq --arg value "$NEW_RECORD" '[.[] | .ARecordIdentifier[]] | any(. == $value)' "$FILE")
-          if [ "$CNAME_EXISTS" = "true" ] || [ "ARECORD_EXISTS" = "true" ]; then
+          CNAME_EXISTS=$(jq --arg pattern "$NEW_RECORD" '[.[] | .CNAMEIdentifier[]] | any(test($pattern))' "$FILE")
+          ARECORD_EXISTS=$(jq --arg value "$NEW_A_RECORD" '[.[] | .ARecordIdentifier[]] | any(. == $value)' "$FILE")
+          if [ "$CNAME_EXISTS" = "true" ] || [ "$ARECORD_EXISTS" = "true" ]; then
             echo "存在しています。"
           else
-            echo"サービスを追加します。"
+            echo "サービスを追加します。"
             NEW_ENTRY=$(jq -n \
-              --arg cname "NEW_RECORD"\
+              --arg cname "$NEW_RECORD"\
               --arg arecord "$NEW_A_RECORD" \
               '{
                 Name: "Automationed",
                 ServiceHost: "",
                 PassStatus: false,
-                CNAMEIdentifer: [$cname],
+                CNAMEIdentifier: [$cname],
                 ARecordIdentifier: [$arecord]
               }'
             )
 
             TMP=$(mktemp)
             jq ". += [$NEW_ENTRY]" "$FILE" > "$TMP" && mv "$TMP" "$FILE"
-            echo "追加したんやで～ $FILE"
+            echo "JSON内にデータ追加 $FILE"
           fi
-      - name: Java Setup
-        uses: actions/setup-java@v4
-        with: 
-          distribution: 'temurin'
-          java-version: '21'
-          
-      - name: Java Compile And Result
-        run: |
-          mvn clean package
-          #Javaを実行する
-          RESULT=$(java -jar cli/target/cli-flat.jar "$DEFAULT_DOMAIN")
-          echo "CHECK_RESULT=$RESULT" >> $GITHUB_ENV
+
         
     
     
