@@ -155,7 +155,7 @@ public class Core {
 
         try {
             // JSONから検知用データの取得
-            InputStream IS = Core.class.getClassLoader().getResourceAsStream("checkfile/DifineCheck.json");
+            InputStream IS = Core.class.getClassLoader().getResourceAsStream("checkfile/DefineCheck.json");
             String JsonString = new String(IS.readAllBytes(), StandardCharsets.UTF_8);
             // JSONのデータを取得した。
             JSONArray CheckList = new JSONArray(JsonString);
