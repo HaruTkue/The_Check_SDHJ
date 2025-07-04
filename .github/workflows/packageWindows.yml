@@ -1,0 +1,35 @@
+name: build jpackage Windows 
+
+on:
+  workflow_dispatch:
+
+jobs:
+  package-linux:
+    runs-on: windows-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+          
+      - name: Package Win
+        run: |
+          jpackage ^
+          --type deb ^
+          --input cli/target ^
+          --dest out ^
+          --name SdhjChecker ^
+          --main-jar cli-flat.jar ^
+          --main-class io.github.harutkue.checker.cli.app.Main ^
+          --win console
+      
+      - name: package Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: SdhjChecker-deb
+          path: out/*.deb
