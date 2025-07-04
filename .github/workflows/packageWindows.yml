@@ -16,6 +16,10 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 21
+
+      - name: build
+        run: |
+          mvn celan package 
           
       - name: Package Win
         run: |
