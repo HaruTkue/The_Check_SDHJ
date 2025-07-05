@@ -23,14 +23,15 @@ jobs:
       - name: Get DNSRecord
         #取得したサブドメインからCNAME/Aレコードを取得する
         run: |
-         RECORD=$(dig +short CNAME "$DEFAULT_DOMAIN")
-         A_RECORD=$(dig +short A "$DEFAULT_DOMAIN")
+         RECORD=$(dig +short CNAME "$DEFAULT_DOMAIN" | tr -d '\n')
+         A_RECORD=$(dig +short A "$DEFAULT_DOMAIN" | head -n1 | tr -d '\n')
          echo "RECORD=$RECORD" >>$GITHUB_ENV
          echo "A_RECORD=$A_RECORD" >>$GITHUB_ENV
       #ホスト名を指定したリクエスト送信
       #curlコマンド
       - name: TRequest
         run: |
+         echo "TRequest to https://$RECORD"
          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -H "Host: $DEFAULT_DOMAIN" "https://$RECORD")
          echo "TRUE_STATUS_CODE=$RESPONSE" >> $GITHUB_ENV
       #-Hを使用し、ホストに雑なものをぶち込む
