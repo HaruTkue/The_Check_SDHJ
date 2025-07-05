@@ -82,8 +82,8 @@ jobs:
           NEW_RECORD="$SETDATA"
           NEW_A_RECORD="$A_RECORD"
           
-          CNAME_EXISTS=$(jq --arg pattern "$NEW_RECORD" '[.[] | .CNAMEIdentifier? // [] | test($pattern)] | any' "$FILE")
-          ARECORD_EXISTS=$(jq --arg value "$NEW_A_RECORD" '[.[] | .ARecordIdentifier? // [] | . == $value] | any' "$FILE")
+          CNAME_EXISTS=$(jq --arg pattern "$NEW_RECORD" '[.[] | .CNAMEIdentifier? // [] | map(test($pattern))| any]' "$FILE")
+          ARECORD_EXISTS=$(jq --arg value "$NEW_A_RECORD" '[.[] | .ARecordIdentifier? // [] | map(. == $value)| any]' "$FILE")
           if [ "$CNAME_EXISTS" = "true" ] || [ "$ARECORD_EXISTS" = "true" ]; then
             echo "存在しています。"
           else
