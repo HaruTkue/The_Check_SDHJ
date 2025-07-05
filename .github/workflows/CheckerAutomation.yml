@@ -12,6 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     
     steps: 
+      - name: checkout
+        uses: actions/checkout@v4 
+        
       - name: Get PullRequestData
         #サブドメインをプルリク内から取得する
         #取得したサブドメインをDEFAULT_DOMAINに格納
