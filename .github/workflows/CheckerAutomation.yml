@@ -14,7 +14,7 @@ jobs:
     
     steps: 
       - name: checkout
-        run: actions/checkout@v4 
+        uses: actions/checkout@v4 
         
       - name: Get PullRequestData
         #サブドメインをプルリク内から取得する
