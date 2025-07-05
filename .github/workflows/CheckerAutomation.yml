@@ -4,7 +4,11 @@ on:
   pull_request:
     types:
      - opened
-
+     
+permissions:
+  contents: write
+  pull-requests: write
+  
 jobs:
   get-request:
     if: ${{ github.event.pull_request.title}} == 'AddService'
@@ -103,9 +107,21 @@ jobs:
             TMP=$(mktemp)
             jq ". += [$NEW_ENTRY]" "$FILE" > "$TMP" && mv "$TMP" "$FILE"
             echo "JSON内にデータ追加 $FILE"
-          fi
+          
 
-        
-    
+    #GitHubリポジトリ内に反映
+      - name: commit
+        run:  |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+          git add ./core/src/main/resources/checkfile/DefineCheck.json
+
+          if git diff --cached --quiet; then
+            echo "変化なし"
+          else
+            git commit -m "対応クラウドサービスを追加"
+            git push origin HEAD:${{ github.head_ref}}
+          fi
     
   
