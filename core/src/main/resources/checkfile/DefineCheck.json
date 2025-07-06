@@ -1,21 +1,42 @@
 [
-    {
-        "Name": "GithubPages",
-        "ServiceHost": "github.io",
-        "PassStatus": true,
-        "CNAMEIdentifier":[".*\\.github\\.io\\.?$"],
-        "ARecordIdentifier":["185.199.108.153"]
-    },
-    {
-        "Name": "wordPress",
-        "PassStatus": false,
-        "CNAMEIdentifier":[".*\\.(wordpress\\.com|wpcomstaging\\.com)\\.?$"],
-        "ARecordIdentifier":["192.168.11.14"],
-        "fingerprint": "doesn't exist"
-    },
-    {
-        "Name": "Vercel",
-        "PassStatus": true,
-        "CNAMEIdentifier":[".*\\.vercel\\.app\\.?$|.*\\.vercel-dns\\.com\\.?$"]
-    }
+  {
+    "Name": "GithubPages",
+    "ServiceHost": "github.io",
+    "PassStatus": true,
+    "CNAMEIdentifier": [
+      ".*\\.github\\.io\\.?$"
+    ],
+    "ARecordIdentifier": [
+      "185.199.108.153"
+    ]
+  },
+  {
+    "Name": "wordPress",
+    "PassStatus": false,
+    "CNAMEIdentifier": [
+      ".*\\.(wordpress\\.com|wpcomstaging\\.com)\\.?$"
+    ],
+    "ARecordIdentifier": [
+      "192.168.11.14"
+    ],
+    "fingerprint": "doesn't exist"
+  },
+  {
+    "Name": "Vercel",
+    "PassStatus": true,
+    "CNAMEIdentifier": [
+      ".*\\.vercel\\.app\\.?$|.*\\.vercel-dns\\.com\\.?$"
+    ]
+  },
+  {
+    "Name": "Automationed",
+    "ServiceHost": "",
+    "PassStatus": false,
+    "CNAMEIdentifier": [
+      "^[a-z]+\\.up\\.railway\\.app\\."
+    ],
+    "ARecordIdentifier": [
+      "6eo1o9jq.up.railway.app."
+    ]
+  }
 ]
