@@ -48,7 +48,7 @@ public class Main {
 
 
         //複数データのテスト
-        
+        /*
         System.out.println("複数データ--------------------------");
         List<String> TestData = new ArrayList<>();
         TestData.add("harugpg.shinchokudonan.com");
@@ -57,7 +57,7 @@ public class Main {
         TestData.add("");
         TestData.add("harugpg.shinchokudonan.com");
         AnswerList = newGetConnection.GetRequestValue(TestData);
-        System.out.println(AnswerList);
+        System.out.println(AnswerList);*/
 
         
     }

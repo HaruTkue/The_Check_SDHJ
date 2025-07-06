@@ -17,15 +17,24 @@ import java.io.InputStreamReader;
 public class ExSearch {
     public String guideData(CheckerRecords CheckData,String SearchStatus,String SearchFP){
         //どう分岐させる?
+        System.out.println(CheckData);
         String Ans ="";
 
-        try{
+        System.out.println(SearchFP);
+        //fingerprint -ノーマルの方法を使う必要有り
+        if(SearchFP.equals("NSearch")){
+            //通常の方法でのステータスコード検知
+            System.out.println("2系");
+            Ans = NSearch(CheckData);
+        }else{
+            try{
             //Methodを検索する
-            Method method = this.getClass().getMethod(SearchStatus,CheckerRecords.class,String.class);
-            Ans = (String) method.invoke(this, CheckData,SearchFP);
+                Method method = this.getClass().getMethod(SearchStatus,CheckerRecords.class,String.class);
+                Ans = (String) method.invoke(this, CheckData,SearchFP);
 
-        }catch(Exception e){
-            e.printStackTrace();
+            }catch(Exception e){
+                e.printStackTrace();
+        }
         }
         
         return Ans;
@@ -73,5 +82,34 @@ public class ExSearch {
         }
 
         return ReturnValue;
+    }
+    public static String NSearch(CheckerRecords CheckData){
+        String ReturnValue = "";
+        String CheckDomainRecord = CheckData.DomainData();
+        String url = "https://" + CheckDomainRecord;
+        System.out.println(CheckDomainRecord);
+        try{
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(6000);
+            connection.setReadTimeout(0);
+            connection.setInstanceFollowRedirects(true);
+
+            //アクセス
+            connection.connect();
+            
+            int responseCode = connection.getResponseCode();
+            if(responseCode >= 200 && responseCode < 400){
+                ReturnValue = CheckData.DomainData() + ":OK";
+            }else{
+                ReturnValue = CheckData.DomainData() + ":NG";
+            }
+            
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return ReturnValue;
+        
     }
 }

@@ -10,6 +10,7 @@
       "185.199.108.153"
     ]
   },
+
   {
     "Name": "wordPress",
     "PassStatus": false,
@@ -21,6 +22,7 @@
     ],
     "fingerprint": "doesn't exist"
   },
+
   {
     "Name": "Vercel",
     "PassStatus": true,
@@ -28,15 +30,14 @@
       ".*\\.vercel\\.app\\.?$|.*\\.vercel-dns\\.com\\.?$"
     ]
   },
+
   {
     "Name": "Automationed",
     "ServiceHost": "",
     "PassStatus": false,
     "CNAMEIdentifier": [
-      "^[a-z]+\\.up\\.railway\\.app\\."
+      "^[a-z0-9]+\\.up\\.railway\\.app\\.?$"
     ],
-    "ARecordIdentifier": [
-      "6eo1o9jq.up.railway.app."
-    ]
+    "fingerprint": "NSearch"
   }
 ]
