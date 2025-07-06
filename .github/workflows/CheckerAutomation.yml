@@ -121,6 +121,7 @@ jobs:
             echo "変化なし"
           else
             git commit -m "対応クラウドサービスを追加"
+            git pull --rebase origin ${{ github.head_ref }}
             git push origin HEAD:${{ github.head_ref}}
           fi
     
