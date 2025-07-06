@@ -106,6 +106,7 @@ jobs:
             TMP=$(mktemp)
             jq ". += [$NEW_ENTRY]" "$FILE" > "$TMP" && mv "$TMP" "$FILE"
             echo "JSON内にデータ追加 $FILE"
+          fi
           
 
     #GitHubリポジトリ内に反映
