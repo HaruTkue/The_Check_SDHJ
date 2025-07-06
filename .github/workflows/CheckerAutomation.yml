@@ -66,7 +66,7 @@ jobs:
           if count >= 2:
             for i in range(0,len(record)):
               if record[i] =="." and flag:
-                TempData = "^[a-z]+\\\." #この部分では前文字列を正規表現化するため =　で正しい。
+                TempData = "^[a-z0-9]+\\\." #この部分では前文字列を正規表現化するため =　で正しい。
                 flag= False
               elif record[i] == ".":
                 TempData += "\\\."
@@ -78,6 +78,7 @@ jobs:
                 TempData += "\\\."
               else:
                 TempData += record[i]
+          TempData += "?$"
           print(TempData, end="")
           EOF
           )
@@ -121,7 +122,7 @@ jobs:
           git add ./core/src/main/resources/checkfile/DefineCheck.json
 
           if git diff --cached --quiet; then
-            echo "変化なし"
+            echo "既に登録されているデータ"
           else
             git commit -m "対応クラウドサービスを追加"
             git pull --rebase origin ${{ github.head_ref }}
