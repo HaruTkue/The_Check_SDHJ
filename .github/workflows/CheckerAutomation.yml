@@ -35,6 +35,9 @@ jobs:
          A_RECORD=$(dig +short A "$DEFAULT_DOMAIN" | head -n1 | tr -d '\n')
          echo "RECORD=$RECORD" >>$GITHUB_ENV
          echo "A_RECORD=$A_RECORD" >>$GITHUB_ENV
+         #デバッグやります。
+         echo "$RECORD"
+         echo "$A_RECORD"
       #ホスト名を指定したリクエスト送信
       #curlコマンド
       - name: TRequest
