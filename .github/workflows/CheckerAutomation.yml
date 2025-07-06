@@ -93,7 +93,7 @@ jobs:
           else
             echo "サービスを追加します。"
             NEW_ENTRY=$(jq -n \
-              --arg cname "$NEW_RECORD"\
+              --arg cname "$NEW_RECORD" \
               --arg arecord "$NEW_A_RECORD" \
               '{
                 Name: "Automationed",
@@ -101,8 +101,7 @@ jobs:
                 PassStatus: false,
                 CNAMEIdentifier: [$cname],
                 ARecordIdentifier: [$arecord]
-              }'
-            )
+              }')
 
             TMP=$(mktemp)
             jq ". += [$NEW_ENTRY]" "$FILE" > "$TMP" && mv "$TMP" "$FILE"
