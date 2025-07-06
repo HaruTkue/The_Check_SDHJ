@@ -118,14 +118,16 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
 
+          git fetch origin ${{ github.head_ref }}
+          git checkout ${{ github.head_ref}}
+          
           git add ./core/src/main/resources/checkfile/DefineCheck.json
 
           if git diff --cached --quiet; then
             echo "変化なし"
           else
             git commit -m "対応クラウドサービスを追加"
-            git pull --rebase origin ${{ github.head_ref }}
-            git push origin HEAD:${{ github.head_ref}}
+            git push --force-with-lease origin ${{ github.head_ref}}
           fi
     
   
