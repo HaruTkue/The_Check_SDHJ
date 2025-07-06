@@ -38,6 +38,12 @@ jobs:
          #デバッグやります。
          echo "CNAMEレコード:$RECORD"
          echo "Aレコード:$A_RECORD"
+      - name: Validate
+        run: |
+          if [ -z "$RECORD" ] && [ -z "$A_RECORD" ]; then
+            echo "レコードがありません"
+            exit 1
+          fi
       #ホスト名を指定したリクエスト送信
       #curlコマンド
       - name: TRequest
@@ -83,6 +89,13 @@ jobs:
           )
           echo "SETDATA=$data" >> $GITHUB_ENV
       #JSONファイル内に同様のデータがないかを確認する
+      - name: check SETDATA
+        run: | 
+          if [ -z "$SETDATA" ]; then
+            echo "正規表現化に失敗しました"
+            exit 1
+          fi
+          
       - name: JSON Check
         run: |
           FILE="./core/src/main/resources/checkfile/DefineCheck.json"
