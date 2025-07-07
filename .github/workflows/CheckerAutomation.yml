@@ -57,8 +57,19 @@ jobs:
          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -H "Host: example.com" "https://$RECORD") 
          echo "FALSE_STATUS_CODE=$RESPONSE" >> $GITHUB_ENV
       #-JSONにデータを追加するかの判定を行う。なお、TR/FRの結果が違う際に追加
-      - name: Data orthopaedy
-        if: ${{env.TRUE_STATUS_CODE != env.FALSE_STATUS_CODE}} 
+
+      - name: Data Check
+      # ホスト名を用いた検知が不可能 通常・異常状態双方が不可能な場合
+        run: | 
+           if [ "$TRUE_STATUS_CODE" = "$FALSE_STATUS_CODE" ]; then
+            echo "ホスト名を使用した検知が不可能です。"
+            echo "CNAME:$RECORD"
+            exit 1 
+           else
+             echo "検知可能です。"
+           fi
+           
+      - name: Data orthopaedy  
       #検知可能なのでレコードから正規表現のデータを作成
       #pythonで実装したものを実行
         run: |
@@ -114,7 +125,7 @@ jobs:
               '{
                 Name: "Automationed",
                 ServiceHost: "",
-                PassStatus: false,
+                PassStatus: true,
                 CNAMEIdentifier: [$cname],
                 ARecordIdentifier: [$arecord]
               }')
