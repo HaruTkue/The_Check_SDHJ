@@ -79,9 +79,25 @@ public class Main {
         // 単独での検知処理
         System.out.println("検知したいサブドメインを入力してください");
         Scanner scanner = new Scanner(System.in);
-        String CheckDomain = scanner.nextLine();
-        scanner.close();
+        String CheckDomain;
+        
+        do {
+            // 処理の形式が正式であるかを確認する。
+            CheckDomain = scanner.nextLine();
+            // おなやみ:現状の入力状況を出力しようかな
+            if ((SubDomainPattern.matcher(CheckDomain)).matches() || (DomainPattern.matcher(CheckDomain)).matches()) {
+                // 適合している
+                
+                System.out.println("正しく入力されました。");
+                break;
+            }else {
+                // 不適合
+                System.out.println("適切な形式で入力してください");
+            }
+
+        } while (true);
         // 検知処理
+        scanner.close();
         Core newGetConnection = new Core();
         List<HashMap<String, Boolean>> AnswerList = new ArrayList<>();
         AnswerList = newGetConnection.GetRequestValue(CheckDomain);
@@ -92,6 +108,10 @@ public class Main {
             Boolean Ans = EntryValue.getValue();
             // if文で出力を変える
             if (Ans) {
+                if (AnswerUri.contains(":Nothing")) {
+                    System.out.println(AnswerUri.substring(0, AnswerUri.indexOf(":Nothing")) + "は削除されたか存在していません。");
+                    continue;
+                }
                 System.out.println(GREENCOLOR + AnswerUri + "は正常に設定されています" + RESETCOLOR);
             } else {
                 System.out.println(REDCOLOR + AnswerUri + "は正常に設定されていません!" + RESETCOLOR);
@@ -168,7 +188,7 @@ public class Main {
                 Boolean Ans = EntryValue.getValue();
                 // if文で出力を変える
                 if (Ans) {
-                    
+
                     if (AnswerUri.contains(":Nothing")) {
                         System.out.println(AnswerUri.substring(0, AnswerUri.indexOf(":Nothing")) + "は削除されたか存在していません。");
                         continue;
