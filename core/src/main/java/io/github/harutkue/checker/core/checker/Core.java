@@ -79,7 +79,7 @@ public class Core {
                 List<String> ViaList =new ArrayList<>();
                 //Error
                 ViaList.add(OneSearch(Record));
-                System.out.println("count:"+count+ViaList);
+                //System.out.println("count:"+count+ViaList);
                 AnsToList.add(ViaList.get(0));
                 //値を取り出す処理は完了 --今後はそれのリスト化などを行う。
             }
@@ -190,7 +190,8 @@ public class Core {
                 } else if (CheckDatas.RecordType() == "A") {
                     CheckValues = CheckService.getJSONArray("ARecordIdentifier");
                 } else {
-                    //不明なケース
+                    //不明なケース・存在しないケース
+                    
                 }
 
                 ///
@@ -202,6 +203,7 @@ public class Core {
                 // サービスのそれぞれの奴と合致するかどうかを確かめる。
                 //CheckValuesがnullの場合にはじく
 
+                //パターン合致がないケース
                 if(CheckValues == null){
                     continue;
                 }
@@ -230,12 +232,12 @@ public class Core {
                                 String SearchFP = CheckService.getString("fingerprint");
 
                                 RetrunValue = ex.guideData(CheckDatas, ServiceName,SearchFP);
-                                
+                                System.out.println(RetrunValue);
                             }
 
                         } else {
                             // Debug
-                            System.out.println("定義ファイルpass");
+                            //System.out.println("定義ファイル通過");
                             continue;
                         }
                     } else {
@@ -256,8 +258,15 @@ public class Core {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("正しく処理ができていない場合");
-
+        
+        //データの検証箇所(どのような部分でエラーを起こしているか)
+        //Case DNSレコードがないドメイン(ドメインであるか怪しいやつ)
+        
+        if(!(CheckDatas.RecordType() == null )||!( CheckDatas.Record() == null )|| !( CheckDatas.DomainData().isEmpty())){
+            //System.out.println("Record取得できてないケース");
+            RetrunValue = CheckDatas.DomainData() +":Nt";
+            return RetrunValue;
+        }
         // すべてが終了した際に、引数をぶち返すやつ。
         return null;
     }
@@ -345,11 +354,11 @@ public class Core {
             //ホスト名の指定
             HttpGet request = new HttpGet(url);
             request.setHeader("Host",CheckData.Record());
-            System.out.println("リクエスト内容");
-            System.out.println(request);
+            //System.out.println("リクエスト内容");
+            //System.out.println(request);
             try(CloseableHttpResponse response = client.execute(request)){
                 int responseCode = response.getCode();
-                System.out.println("リクエスト結果:" + responseCode);
+                //System.out.println("リクエスト結果:" + responseCode);
                 //判定
                 if (responseCode >= 200 && responseCode < 400){
                     ReturnValue = CheckData.DomainData() + ":OK";
@@ -395,14 +404,21 @@ public class Core {
                 SecondValue = false;
                 // Hashmapで FirstValueをkeyに,結果をvalueとして保存する。
                 ValueRecord.put(FirstValue, SecondValue);
-            } else {
+            } else if (Value.contains(":Nt")){
+                //Nothing Case 
+                FirstValue = Value.substring(0,Value.indexOf(":Nt")) + ":Nothing";
+                SecondValue= true;
+                ValueRecord.put(FirstValue,SecondValue);
+            }
+            
+            else{
                 // 例外発生
                 System.out.println("適切なデータ形式ではありません");
             }
             //作成した ValueRecordをListにぶち込む
             DataList.add(ValueRecord);
         }
-        System.out.println(DataList);
+        //System.out.println(DataList);
         return DataList;
     }
 }
