@@ -27,7 +27,7 @@ jobs:
          DOMAIN=${{ github.event.pull_request.body }}
          echo "DEFAULT_DOMAIN=$DOMAIN" >> $GITHUB_ENV
          
-         
+
       - name: Get DNSRecord
         #取得したサブドメインからCNAME/Aレコードを取得する
         run: |
@@ -68,7 +68,13 @@ jobs:
            else
              echo "検知可能です。"
            fi
-           
+        #ダメな時に回すやつ
+      - name: SubCheck
+        if: $TRUE_STATUS_CODE = $FALSE_STATUS_CODE 
+        run: |
+          #一縷の望みにかけて雑なサブドメインと正しいサブドメインで調べる
+          TRUE_STATUS_CODE_2 = $(curl -s -o /dev/null -w "%{http_code} "https://$DEFAULT_DOMAIN")
+          #どうやってサブドメイン部を無茶苦茶にしたやつを入れよう      
       - name: Data orthopaedy  
       #検知可能なのでレコードから正規表現のデータを作成
       #pythonで実装したものを実行
