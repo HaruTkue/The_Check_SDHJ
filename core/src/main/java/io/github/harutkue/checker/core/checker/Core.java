@@ -150,8 +150,12 @@ public class Core {
 
     // 検知機能本体-単独用
     public String OneSearch(CheckerRecords CheckDatas) {
+        //検知の検証
+        System.out.println(CheckDatas);
+        
         // 単独用の検知処理
         String RetrunValue = null;
+
 
         try {
             // JSONから検知用データの取得
@@ -216,7 +220,7 @@ public class Core {
                     if (CheckDatas.Record() != null) {
                         if (CHECKPATTERN.matcher(CheckDatas.Record()).matches()) {
                             // パターンがマッチした場合に次の処理に移る。
-                            //System.out.println("--------パターンマッチ完了------");
+                            System.out.println("--------パターンマッチ完了------");
                             //Check可能かを確かめる
                             if(SerivcePattern){
                                 //通常の動作

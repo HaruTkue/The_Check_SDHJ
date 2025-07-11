@@ -36,7 +36,16 @@
     "ServiceHost": "",
     "PassStatus": false,
     "CNAMEIdentifier": [
-      "^[a-z0-9]+\\.up\\.railway\\.app\\.?$"
+      "^[a-z0-9-]+\\.up\\.railway\\.app\\.?$"
+    ],
+    "fingerprint": "NSearch"
+  },
+  {
+    "Name": "Automationed",
+    "ServiceHost": "",
+    "PassStatus": false,
+    "CNAMEIdentifier": [
+      "^[a-z0-9-]+\\.netlify\\.app\\.?$"
     ],
     "fingerprint": "NSearch"
   }
