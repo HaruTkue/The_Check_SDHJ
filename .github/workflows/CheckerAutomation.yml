@@ -64,17 +64,44 @@ jobs:
            if [ "$TRUE_STATUS_CODE" = "$FALSE_STATUS_CODE" ]; then
             echo "ホスト名を使用した検知が不可能です。"
             echo "CNAME:$RECORD"
-            exit 1 
+            
+            echo "STATUS_ACTION=1" >> $GITHUB_ENV
            else
              echo "検知可能です。"
            fi
         #ダメな時に回すやつ
       - name: SubCheck
-        if: $TRUE_STATUS_CODE = $FALSE_STATUS_CODE 
+        if: ${{ env.TRUE_STATUS_CODE == env.FALSE_STATUS_CODE }} 
+        #サブドメインで調べる
+        # どうやってサブドメイン部を無茶苦茶にしたドメインを入れよう    
         run: |
-          #一縷の望みにかけて雑なサブドメインと正しいサブドメインで調べる
-          TRUE_STATUS_CODE_2 = $(curl -s -o /dev/null -w "%{http_code} "https://$DEFAULT_DOMAIN")
-          #どうやってサブドメイン部を無茶苦茶にしたやつを入れよう      
+          TRUE_STATUS_CODE_2=$(curl -s -o /dev/null -w "%{http_code}" "https://$DEFAULT_DOMAIN")
+
+          FALSE_DOMAIN=$( python3 <<EOF
+          import os 
+          Domain = os.environ["DEFAULT_DOMAIN"]
+          flag=True
+          toDomain=""
+          for i in range(0,len(Domain)):
+            if flag and Domain[i]==".":
+              toDomain="dfibouoghhuif"
+              flag=False
+            else:
+              toDomain+=Domain[i]
+          print(toDomain,end="")
+          EOF
+          )
+
+          FALSE_STATUS_CODE2=$(curl -s -o /dev/null -w "%{http_code}" "https://$FALSE_DOMAIN")
+          if [ "$TRUE_STATUS_CODE2" = "$FALSE_STATUS_CODE2" ]; then
+            echo "ドメイン名を使用した検知が可能です。"
+            echo "STATUS_ACTION=2" >> $GITHUB_ENV
+          else
+            echo "fp以外不可"
+            exit 1
+          fi
+          
+          
       - name: Data orthopaedy  
       #検知可能なのでレコードから正規表現のデータを作成
       #pythonで実装したものを実行
@@ -87,9 +114,9 @@ jobs:
           TempData=""
           flag=True
           if count >= 2:
-            for i in range(0,len(record)):
+            for i in range(0, len(Domain)):
               if record[i] =="." and flag:
-                TempData = "^[a-z]+\\\." #この部分では前文字列を正規表現化するため =　で正しい。
+                TempData = "^[a-z0-9-]+\\\." #この部分では前文字列を正規表現化するため =　で正しい。
                 flag= False
               elif record[i] == ".":
                 TempData += "\\\."
@@ -113,7 +140,8 @@ jobs:
             exit 1
           fi
           
-      - name: JSON Check
+      - name: JSON Check A
+        if:  ${{ env.STATUS_ACTION == '1' }}
         run: |
           FILE="./core/src/main/resources/checkfile/DefineCheck.json"
           NEW_RECORD="$SETDATA"
@@ -123,6 +151,7 @@ jobs:
           ARECORD_EXISTS=$(jq --arg value "$NEW_A_RECORD" '[.[] | .ARecordIdentifier? // [] | map(. == $value)| any]' "$FILE")
           if [ "$CNAME_EXISTS" = "true" ] || [ "$ARECORD_EXISTS" = "true" ]; then
             echo "存在しています。"
+            exit 1
           else
             echo "サービスを追加します。"
             NEW_ENTRY=$(jq -n \
@@ -137,6 +166,37 @@ jobs:
               }')
 
             TMP=$(mktemp)
+            jq ". += [$NEW_ENTRY]" "$FILE" > "$TMP" && mv "$TMP" "$FILE"
+            echo "JSON内にデータ追加 $FILE"
+          fi
+
+      - name: JSON Check B
+        if: ${{ env.STATUS_ACTION == '2' }}
+        # ファイル次第
+        run: |
+          
+          FILE="./core/src/main/resources/checkfile/DefineCheck.json"
+          NEW_RECORD="$SETDATA"
+          NEW_A_RECORD="$A_RECORD"
+          CNAME_EXISTS=$(jq --arg pattern "$NEW_RECORD" '[.[] | .CNAMEIdentifier? // [] | map(test($pattern))| any]' "$FILE")
+          ARECORD_EXISTS=$(jq --arg value "$NEW_A_RECORD" '[.[] | .ARecordIdentifier? // [] | map(. == $value)| any]' "$FILE")
+          if [ "$CNAME_EXISTS" = "true" ] || [ "$ARECORD_EXISTS" = "true" ]; then
+            echo "存在しています。"
+            exit 1
+          else
+            echo "サービスを追加します。"
+            NEW_ENTRY=$(jq -n \
+              --arg cname "$NEW_RECORD" \
+              --arg arecord "$NEW_A_RECORD" \
+              '{
+                Name: "Automationed",
+                ServiceHost: "",
+                PassStatus: true,
+                CNAMEIdentifier: [$cname],
+                ARecordIdentifier: [$arecord],
+                fingerprint: "NSearch"
+              }')
+                          TMP=$(mktemp)
             jq ". += [$NEW_ENTRY]" "$FILE" > "$TMP" && mv "$TMP" "$FILE"
             echo "JSON内にデータ追加 $FILE"
           fi
