@@ -19,21 +19,21 @@ jobs:
 
       - name: build
         run: |
-          mvn celan package 
+          mvn clean package 
           
       - name: Package Win
         run: |
           jpackage ^
-          --type deb ^
+          --type exe ^
           --input cli/target ^
           --dest out ^
           --name SdhjChecker ^
           --main-jar cli-flat.jar ^
           --main-class io.github.harutkue.checker.cli.app.Main ^
-          --win console
-      
+          --win-console       
+
       - name: package Upload
         uses: actions/upload-artifact@v4
         with:
-          name: SdhjChecker-deb
-          path: out/*.deb
+          name: SdhjChecker-exe
+          path: out/*.exe
