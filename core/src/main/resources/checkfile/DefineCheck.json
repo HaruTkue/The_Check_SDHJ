@@ -13,13 +13,14 @@
   {
     "Name": "Render",
     "ServiceHost": "render.com",
-    "PassStatus": true,
+    "PassStatus": false,
     "CNAMEIdentifier": [
       ".*\\.onrender\\.com\\.?$"
     ],
     "ARecordIdentifier": [
       ""
-    ]
+    ],
+    "fingerprint": "NSearch"
   },
 
   {
