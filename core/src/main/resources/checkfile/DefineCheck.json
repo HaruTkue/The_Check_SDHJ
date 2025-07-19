@@ -9,6 +9,17 @@
     "ARecordIdentifier": [
       "185.199.108.153"
     ]
+  },  
+  {
+    "Name": "Render",
+    "ServiceHost": "render.com",
+    "PassStatus": true,
+    "CNAMEIdentifier": [
+      ".*\\.onrender\\.com\\.?$"
+    ],
+    "ARecordIdentifier": [
+      ""
+    ]
   },
 
   {
