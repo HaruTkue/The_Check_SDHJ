@@ -103,6 +103,8 @@ public class Core2 {
                     CheckValues = CheckService.getJSONArray("ARecordIdentifier");
                 }else if(CheckDatas.RecordType() == "Error" || CheckDatas.RecordType() =="Nothing"){
                     //データをさっさと作ってreturnする
+                    Map<String,String> Result = new HashMap<>();
+                    return Result;
                 }else{
                     
                 }
@@ -123,20 +125,27 @@ public class Core2 {
                             String Value = SearchAns3(Checkdatas);
 
                             //ここで構築して消す
-                            RetrunValue.put(Checkdatas.DomainData(), Value);
+                            RetrunValue.put(Checkdatas.DomainData(),Value);
                         }else{
                             ExSearch ex = new ExSearch();
+                            String SearchFP = CheckService.getString("fingerprint");
+                            String CheckValue  = ex.guideData(Checkdatas, SearchName, SearchFP);
+
+                            //EXの場合はこの処理に追加して状態を特定できるようにする.
                         }
+                    }else{
+                        continue;
                     }
                 }
             }
         }catch (IOException e){
             //どこかのエラー
+            e.printStackTrace();
         }
         return null;
     }
 
-    //
+    //ホスト云々
     public static SearchAns3(CheckerRecords CheckData){
         String CheckDomainRecord = CheckData.Record().replaceAll("\\.$", "");
         String url="https://" + CheckDomainRecord;
@@ -157,14 +166,40 @@ public class Core2 {
                 }
             }
         }catch(Exception e){
+            //誤りコード
             e.printStackTrace();
         }
         return ReturnValue;
     }
     //一般向け
-    public static SearchAns1(CheckerRecords CheckData){
+    public static SearchAns2(CheckerRecords CheckData){
         String CheckDomainRecord = CheckData.Record().replaceAll("\\.$", "");
         String url="https://" + CheckDomainRecord;
+
+        try {
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(6000);
+            connection.setReadTimeout(5000);
+            connection.setInstanceFollowRedirects(true);
+
+            //connection
+            connection.connect();
+            int responseCode = connection.getResponseCode();
+            //System.out.println("リクエスト結果:" + responseCode);
+            //判定
+            if (responseCode >= 200 && responseCode < 400){
+                ReturnValue = "1";
+            }else{
+                ReturnValue = "0";
+            }
+            
+        }catch (IOException e){
+            //誤りコード
+            e.printStackTrace();
+        }
+        return ReturnValue;
+
     }
     //DNSリクエスト込みの検知処理
     public static List<Map<String,String>> GetRequestValue(Object DomainData){
@@ -199,7 +234,7 @@ public class Core2 {
                 }
             }
             //作成したCheckerRecordsからMSeacrhを狙う
-            
+            List<Map<String,String>> answer = MSearch(MultiSearchList);
         }
         return ReturnList;
     }
