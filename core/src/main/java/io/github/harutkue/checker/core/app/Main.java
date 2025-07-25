@@ -3,9 +3,11 @@ package io.github.harutkue.checker.core.app;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import io.github.harutkue.checker.core.checker.Core;
+import io.github.harutkue.checker.core.checker.Core2;
 //import io.github.harutkue.checker.core;
 import io.github.harutkue.checker.core.network.Network;
 
@@ -23,6 +25,7 @@ public class Main {
             System.out.println("適切な引数を指定できていません。");
             return;
         }*/
+        /*
         Core newGetConnection =new Core();
         //スキャナ類の処理はいったん使用しない。
         
@@ -47,6 +50,20 @@ public class Main {
 
 
 
+        */
+        //複数データチェック
+        List<String> TestData = new ArrayList<>();
+        List<Map<String,String>> Test = Core2.GetRequestValue("harugpg.shinchokudonan.com");
+
+        System.out.println(Test);
+
+        TestData.add("harugpg.shinchokudonan.com");
+        TestData.add("nise.shinchokudonan.com");
+
+        TestData.add("frigpnhidsg.shinchokudonan.com");
+
+        List<Map<String,String>> Test2 = Core2.GetRequestValue(TestData);
+        System.out.println(Test2);
         //複数データのテスト
         /*
         System.out.println("複数データ--------------------------");

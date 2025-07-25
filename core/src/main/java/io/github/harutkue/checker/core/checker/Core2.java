@@ -56,7 +56,7 @@ public class Core2 {
         }catch(Exception e){
             //DNSでError -アクセス×
             e.printStackTrace();
-            return new CheckerRecords(":001","Error",DomainData);
+            return new CheckerRecords("101","Error",DomainData);
         }
         return null;
     }
@@ -73,17 +73,17 @@ public class Core2 {
                     return new CheckerRecords(ToString,"A", DomainData);
                 }
             }else{
-                return new CheckerRecords(null,"Nothing",DomainData);
+                return new CheckerRecords("2","Nothing",DomainData);
             }
         }catch(Exception e){
             //DNSでエラー発生
             e.printStackTrace();
-            return new CheckerRecords(":001","Error",DomainData);
+            return new CheckerRecords("101","Error",DomainData);
         }
         return null;
     }
     //単独検知処理
-    public static Map<String,String> OneSearch(CheckerRecords Checkdatas){
+    public static Map<String,String> OneSearch(CheckerRecords CheckDatas){
         try{
             //定義ファイル読み出し
             InputStream IS = Core2.class.getClassLoader().getResourceAsStream("checkfile/DefineCheck.json");
@@ -97,6 +97,10 @@ public class Core2 {
                 JSONObject CheckService = DataList.getJSONObject(i);
                 String ServiceName = CheckService.getString("Name");
 
+
+                JSONArray CheckValues = null;
+                Boolean ServicePatten = CheckService.getBoolean("PassStatus");
+
                 if(CheckDatas.RecordType() == "CNAME"){
                     CheckValues = CheckService.getJSONArray("CNAMEIdentifier");
                 }else if(CheckDatas.RecordType() =="A"){
@@ -104,6 +108,7 @@ public class Core2 {
                 }else if(CheckDatas.RecordType() == "Error" || CheckDatas.RecordType() =="Nothing"){
                     //データをさっさと作ってreturnする
                     Map<String,String> Result = new HashMap<>();
+                    Result.put(CheckDatas.DomainData(),CheckDatas.Record());
                     return Result;
                 }else{
                     
@@ -114,41 +119,83 @@ public class Core2 {
                 if(CheckValues == null){
                     continue;
                 }
+
                 for (int j=0; j < CheckValues.length(); j++){
-                    Pattern CHECKPATTERN = Pattern.compile(CheckPAtterns.getString(j));
+                    Pattern CHECKPATTERN = Pattern.compile(CheckPatterns.getString(j));
                     if(CHECKPATTERN.matcher(CheckDatas.Record()).matches()){
                         //パターンマッチ後
 
-                        //もしS3でできるなら
-                        if(ServicePattern){
+                        //合致した場合にて
+                        if(ServicePatten){
                             String CehckStr = CheckPatterns.getString(j);
-                            String Value = SearchAns3(Checkdatas);
-
+                            Map<String,String> Value = SearchAns3(CheckDatas);
                             //ここで構築して消す
-                            RetrunValue.put(Checkdatas.DomainData(),Value);
+                            RetrunValue = Value;
+                            //Returnして終了
+                            return RetrunValue;
                         }else{
-                            ExSearch ex = new ExSearch();
+                            //分岐 NSearch可否を判定する
                             String SearchFP = CheckService.getString("fingerprint");
-                            String CheckValue  = ex.guideData(Checkdatas, SearchName, SearchFP);
+
+
+                            //NSearchの可否で状態を問う
+                            if(SearchFP.equals("NSearch")){
+                                //NSearch実行
+                                return SearchN(CheckDatas);
+
+                            }else{
+                                ExSearch ex = new ExSearch();
+                                String CheckValue  = ex.guideData(CheckDatas, ServiceName, SearchFP);
+
+                                String FirstValue  =null;
+                                Map<String,String> values  = new HashMap<>();
+                                if(CheckValue == null){
+                                    //空のデータ
+                                    
+                                }
+                                if (CheckValue.contains(":OK")){
+                                    //putで成否を記録
+                                    FirstValue = CheckValue.substring(0, CheckValue.indexOf(":OK"));
+                                    values.put(FirstValue,"1");
+                                }else if(CheckValue.contains(":NG")){
+                                    FirstValue = CheckValue.substring(0, CheckValue.indexOf(":OK"));
+                                    values.put(FirstValue,"0");
+                                }else if(CheckValue.contains(":Nt")){
+                                    FirstValue = CheckValue.substring(0,CheckValue.indexOf(":Nt"));
+                                    values.put(FirstValue,"2");
+                                }
+                                return values;
+                            }
 
                             //EXの場合はこの処理に追加して状態を特定できるようにする.
+
                         }
                     }else{
                         continue;
                     }
+                    //この場合は検知ステータスが全くなかったケース
                 }
+                Map<String,String> Value = new HashMap<>();
+                Value.put(CheckDatas.DomainData(),"3");
+                return Value;
             }
         }catch (IOException e){
             //どこかのエラー
-            e.printStackTrace();
+            e.printStackTrace(); 
+            Map<String,String> ErrorRq = new HashMap<>();
+            ErrorRq.put(null,"301");
+
+            return ErrorRq;
         }
         return null;
     }
 
     //ホスト云々
-    public static SearchAns3(CheckerRecords CheckData){
+    public static Map<String,String> SearchAns3(CheckerRecords CheckData){
         String CheckDomainRecord = CheckData.Record().replaceAll("\\.$", "");
         String url="https://" + CheckDomainRecord;
+        Map<String,String> answer = new HashMap<>(); 
+        String ReturnValue;
          try(CloseableHttpClient client = HttpClients.createDefault()){
             //ホスト名の指定
             HttpGet request = new HttpGet(url);
@@ -164,18 +211,23 @@ public class Core2 {
                 }else{
                     ReturnValue = "0";
                 }
+                answer.put(CheckData.DomainData(),ReturnValue);
             }
         }catch(Exception e){
             //誤りコード
+            answer.put(CheckData.DomainData(),"201");
             e.printStackTrace();
         }
-        return ReturnValue;
+        return answer;
     }
     //一般向け
-    public static SearchAns2(CheckerRecords CheckData){
+    public static Map<String,String> SearchN(CheckerRecords CheckData){
         String CheckDomainRecord = CheckData.Record().replaceAll("\\.$", "");
         String url="https://" + CheckDomainRecord;
 
+        String ReturnValue = "";
+
+        Map<String,String> answer = new HashMap<>();
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
             connection.setRequestMethod("GET");
@@ -193,12 +245,16 @@ public class Core2 {
             }else{
                 ReturnValue = "0";
             }
+
+            //ReturnValueの内容からMapを作る
+            answer.put(CheckData.DomainData(),ReturnValue);
             
         }catch (IOException e){
             //誤りコード
+            answer.put(CheckData.DomainData(),"201");
             e.printStackTrace();
         }
-        return ReturnValue;
+        return answer;
 
     }
     //DNSリクエスト込みの検知処理
@@ -234,11 +290,22 @@ public class Core2 {
                 }
             }
             //作成したCheckerRecordsからMSeacrhを狙う
-            List<Map<String,String>> answer = MSearch(MultiSearchList);
+            ReturnList = MSearch(MultiSearchList);
         }
         return ReturnList;
     }
     //複数データのsearchを行う
+
+    //CheckerRecord成型用
+    public static CheckerRecords CreateCheckerRecords(String Record , String RecordType,String CheckDomain){
+        CheckerRecords RetrunRecords = new CheckerRecords(Record,RecordType,CheckDomain);
+        return RetrunRecords; 
+    }
+
+    //成形されたデータ複数検知
+    public static List<Map<String,String>> GetValue(List<List<String>> DomainData){
+        return null;
+    }
     public static List<Map<String,String>> MSearch(List<CheckerRecords> MultiSearchList){
         List<Map<String,String>> answer = new ArrayList<>();
         for(CheckerRecords Records : MultiSearchList){

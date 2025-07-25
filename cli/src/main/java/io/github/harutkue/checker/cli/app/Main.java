@@ -16,8 +16,8 @@ public class Main {
     public static final String REDCOLOR = "\u001B[31m";
     public static final String GREENCOLOR = "\u001B[32m";
 
-    private static final Pattern SubDomainPattern = Pattern.compile("^[a-z]+\\.[a-z]+\\.[a-z]+$");
-    private static final Pattern DomainPattern = Pattern.compile("^[a-z]+\\.[a-z]+\\.[a-z]+$");
+    private static final Pattern SubDomainPattern = Pattern.compile("^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\.)+(?:[a-zA-Z]{2,}|co\\.jp|or\\.jp|ne\\.jp|ac\\.jp|go\\.jp)$");
+    private static final Pattern DomainPattern = Pattern.compile("^[a-zA-Z0-9-]+\\.[a-zA-Z0-9-]+\\.[a-zA-Z0-9-]+$");
 
     // Main
     public static void main(String[] args) {
