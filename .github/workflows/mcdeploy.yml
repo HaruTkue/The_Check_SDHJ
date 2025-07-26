@@ -19,7 +19,7 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
           server-username: ${{ secrets.OSSRH_USERNAME }}
-          server-passphrase: ${{ secrets.OSSRH_PASSWORD }}
+          server-password: ${{ secrets.OSSRH_PASSWORD }}
 
 
       - name: deploy
