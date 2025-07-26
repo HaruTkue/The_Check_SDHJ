@@ -15,11 +15,11 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-          gpg-private-key: ${{ secrets.PRIVATE_KEY }}
-          gpg-passphrase: ${{ secrets.PHARASE }}
           server-id: ossrh
-          ossrh-username: ${{ secrets.OSS_USERNAME }}
-          ossrh-usepass: ${{ secrets.OSS_PASSWORD }}
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          server-username: ${{ secrets.OSSRH_USERNAME }}
+          server-passphrase: ${{ secrets.OSSRH_PASSWORD }}
 
 
       - name: deploy
