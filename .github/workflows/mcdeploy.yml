@@ -16,13 +16,13 @@ jobs:
           distribution: temurin
           java-version: 21
           gpg-private-key: ${{ secrets.PRIVATE_KEY }}
-          gpg-passphase: ${{ secrets.PHARASE }}
+          gpg-passphrase: ${{ secrets.PHARASE }}
           server-id: ossrh
           ossrh-username: ${{ secrets.OSS_USERNAME }}
           ossrh-usepass: ${{ secrets.OSS_PASSWORD }}
 
 
       - name: deploy
-        run: mvn -pl :core -am clean deploy -P release -B -U
+        run: mvn -pl :core -am clean deploy -B -U
 
           
