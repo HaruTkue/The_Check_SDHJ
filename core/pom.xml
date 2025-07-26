@@ -72,7 +72,32 @@
                         <goals><goal>sign</goal></goals>
                     </execution>
                 </executions>
+            </plugin>
 
+            <!--Javadoc-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals><goal>jar</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!--shadeプラグイン-->
@@ -116,12 +141,12 @@
             <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-    <licences>
-        <licence>
+    <licenses>
+        <license>
             <name>Apache Licence</name>
             <url>https://opensource.org/license/apache-2-0</url>
-        </licence>
-    </licences>
+        </license>
+    </licenses>
 
     <!--Userのやつ-->
     <scm>
@@ -134,7 +159,7 @@
         <developer>
             <id>HaruTkue</id>
             <name>HaruTkue</name>
-            <email>haruredirect@gmail.com</email>
+            <email>harutkue@users.noreply.github.com</email>
         </developer>
     </developers>
 </project>
