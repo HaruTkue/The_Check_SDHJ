@@ -23,6 +23,6 @@ jobs:
 
 
       - name: deploy
-        run: mvn -pl :core -am clean deploy -B -U
+        run: mvn -P release -pl :core -am clean deploy -B -U -Dmaven.wagon.http.retryHandler.count=3
 
           
