@@ -1,0 +1,28 @@
+name: MavenCentral
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JavaSet
+        uses: actions/setup-java@v4
+
+        with:
+          distribution: temurin
+          java-version: 21
+          gpg-private-key: ${{ secrets.PRIVATE_KEY }}
+          gpg-passphase: ${{ secrets.PHARASE }}
+          server-id: ossrh
+          ossrh-username: ${{ secrets.OSS_USERNAME }}
+          ossrh-usepass: ${{ secrets.OSS_PASSWORD }}
+
+
+      - name: deploy
+        run: mvn -pl :core -am clean deploy -P release -B -U
+
+          
