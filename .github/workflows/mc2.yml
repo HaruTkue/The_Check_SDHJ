@@ -12,6 +12,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: debug
+        run: echo "${{ secrets.GPG_PRIVATE_KEY }}" | head -20
+
       - name: Set Java
         uses: actions/setup-java@v4
         with:
