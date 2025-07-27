@@ -25,9 +25,10 @@ jobs:
 
       - name: Tema
         run: |
+          echo "$GPG_PRIVATE_KEY" | head -20
           mkdir -p ~/.gnupg
           chmod 700 ~/.gnupg
-          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+          printf '%s\n' "$GPG_PRIVATE_KEY" | gpg --batch --import
 
           echo "allow-loopback-pinentry" >> ~/.gnupg/gpg.conf
           echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
