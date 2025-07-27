@@ -33,7 +33,6 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
     </properties>
 
     <profiles>
@@ -59,6 +58,7 @@
                         </executions>
                         <configuration>
                             <gpgPassphrase>${env.GPG_PASSPHRASE}</gpgPassphrase>
+                            <useAgent>false</useAgent>
                         </configuration>
                     </plugin>
                 </plugins>

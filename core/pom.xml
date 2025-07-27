@@ -18,8 +18,10 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-
+    <!--Name等-->
+    <name>SDHJChecker CoreModule</name>
+    <description>Core module</description>
+    <url>https://github.com/HaruTkue/The_Check_SDHJ</url>
 
     <!--使用module import-->
     <dependencies>
