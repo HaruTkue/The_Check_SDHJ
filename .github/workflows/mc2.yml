@@ -24,11 +24,12 @@ jobs:
           server-username: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
           server-password: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
 
-      - name: Tema
+      - name: KeyHatarake
         run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 -d > private.asc
           mkdir -p ~/.gnupg
           chmod 700 ~/.gnupg
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+          gpg --batch --import private.asc
           gpg --list-secret-keys --keyid-format=long
           
       - name: Gomasuri
