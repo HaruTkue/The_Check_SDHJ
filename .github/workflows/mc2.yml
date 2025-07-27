@@ -31,11 +31,23 @@ jobs:
           chmod 700 ~/.gnupg
           gpg --batch --import private.asc
           gpg --list-secret-keys --keyid-format=long
-          
-      - name: Gomasuri
+
+      - name: Kobiwouru
         run: |
           mkdir -p ~/.m2
-          echo '<settingsSecurity></settingsSecurity>' > ~/.m2/settings-security.xml
+          cat <<EOF > ~/.m2/settings.xml
+<settings>
+  <servers>
+    <server>
+      <id>ossrh</id>
+      <username>${{ secrets.CENTRAL_TOKEN_USERNAME }}</username>
+      <password>${{ secrets.CENTRAL_TOKEN_PASSWORD}}</password>
+    </server>
+  </servers>
+</settings>
+EOF
+          
+
           
       - name: Deploy
         run: mvn -P release -pl :core -am clean deploy -B -U -X -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
