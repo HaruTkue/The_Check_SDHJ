@@ -20,6 +20,10 @@ jobs:
           server-password: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      - name: Gomasuri
+        run: |
+          mkdir -p ~/.m2
+          echo '<settingsSecurity></settingsSecurity>' > ~/.m2/settings-security.xml
           
       - name: Deploy
         run: mvn -P release -pl :core -am clean deploy -B -U -X
