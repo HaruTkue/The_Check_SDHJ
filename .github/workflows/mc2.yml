@@ -23,24 +23,13 @@ jobs:
           server-id: ossrh
           server-username: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
           server-password: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
-          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Tema
         run: |
-          echo "$GPG_PRIVATE_KEY" | head -20
           mkdir -p ~/.gnupg
           chmod 700 ~/.gnupg
-          printf '%s\n' "$GPG_PRIVATE_KEY" | gpg --batch --import
-
-          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg.conf
-          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
-          echo "use-agent" >> ~/.gnupg/gpg.conf
-
-          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
-          echo "pinentry-mode loopback" >> ~/.gnupg/gpg-agent.conf
-          gpgconf --kill gpg-agent
-          gpgconf --launch gpg-agent
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+          gpg --list-secret-keys --keyid-format=long
           
       - name: Gomasuri
         run: |
