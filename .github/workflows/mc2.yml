@@ -33,21 +33,19 @@ jobs:
           gpg --list-secret-keys --keyid-format=long
 
       - name: Kobiwouru
+        env:
+          USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
+          PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
         run: |
           mkdir -p ~/.m2
-          cat <<EOF > ~/.m2/settings.xml
-<settings>
-  <servers>
-    <server>
-      <id>ossrh</id>
-      <username>${{ secrets.CENTRAL_TOKEN_USERNAME }}</username>
-      <password>${{ secrets.CENTRAL_TOKEN_PASSWORD}}</password>
-    </server>
-  </servers>
-</settings>
-EOF
-          
-
-          
+          echo "<settings>" > ~/.m2/settings.xml
+          echo "  <servers>" >> ~/.m2/settings.xml
+          echo "    <server>"  >> ~/.m2/settings.xml
+          echo "      <id>ossrh</id>" >> ~/.m2/settings.xml
+          echo "      <username>${USERNAME}</username>" >> ~/.m2/settings.xml
+          echo "      <password>${PASSWORD}</password>" >> ~/.m2/settings.xml
+          echo "    </server>" >> ~/.m2/settings.xml
+          echo "  </servers>" >> ~/.m2/settings.xml
+          echo "</settings>" >> ~/.m2/settings.xml
       - name: Deploy
         run: mvn -P release -pl :core -am clean deploy -B -U -X -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
