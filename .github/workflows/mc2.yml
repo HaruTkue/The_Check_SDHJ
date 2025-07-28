@@ -48,4 +48,4 @@ jobs:
           echo "  </servers>" >> ~/.m2/settings.xml
           echo "</settings>" >> ~/.m2/settings.xml
       - name: Deploy
-        run: mvn -P release -pl :core -am clean deploy -B -U -X -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
+        run: mvn -P release -pl :core -am clean deploy -B -U -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
