@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.github.harutkue.checker</groupId>
+        <groupId>io.github.harutkue</groupId>
         <artifactId>sdhjchecker</artifactId>
         <version>1.0</version>
         <relativePath>../pom.xml</relativePath>
