@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.github.harutkue.checker</groupId>
+    <groupId>io.github.harutkue</groupId>
     <artifactId>sdhjchecker</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
@@ -26,7 +26,6 @@
     <modules>
         <module>core</module>
         <module>cli</module>
-        <module>automation</module>
     </modules>
 
     <properties>
@@ -34,6 +33,26 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <licenses>
+        <license>
+            <name>Apache Licence, Version 2.0</name>
+            <url>https://opensource.org/license/apache-2-0</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>HaruTkue</id>
+            <name>HaruTkue</name>
+            <email>harutkue@users.noreply.github.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/HaruTkue/The_Check_SDHJ</url>
+        <connection>scm:git:git://github.com/HaruTkue/The_Check_SDHJ.git</connection>
+        <developerConnection>scm:git:ssh://github.com:HaruTkue/The_Check_SDHJ.git</developerConnection>
+    </scm>
 
     <profiles>
         <profile>
