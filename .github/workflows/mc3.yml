@@ -1,0 +1,26 @@
+name: Deploy MC
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Import key
+        run: echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 -d | gpg --batch --import
+
+      - name: Set Java
+        uses: actions/setup-java@v4
+        with:
+           distribution: temurin
+           java-version: '21'
+           server-id: ossrh
+           server-username: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
+           server-password: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
+
+
+      - name: Deploy
+        run: mvn -B -U -P release -pl :core -am clean deploy -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
