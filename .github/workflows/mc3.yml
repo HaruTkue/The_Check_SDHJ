@@ -17,10 +17,10 @@ jobs:
         with:
            distribution: temurin
            java-version: '21'
-           server-id: ossrh
+           server-id: central
            server-username: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
            server-password: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
 
 
       - name: Deploy
-        run: mvn -B -U -P release -pl io.github.harutkue:sdhjchecker-core-module -am clean deploy -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
+        run: mvn -B -P release clean deploy -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
