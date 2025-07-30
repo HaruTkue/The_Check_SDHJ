@@ -12,6 +12,11 @@ jobs:
       - name: Import key
         run: echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 -d | gpg --batch --import
 
+
+      - name: debugf cli pom
+        run: |
+          echo "Tell Debug"
+          cat cli/pom.xml
       - name: Set Java
         uses: actions/setup-java@v4
         with:
@@ -23,4 +28,4 @@ jobs:
 
 
       - name: Deploy
-        run:  mvn -B -P release clean deploy -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
+        run:  mvn -B -X -P release clean deploy -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
