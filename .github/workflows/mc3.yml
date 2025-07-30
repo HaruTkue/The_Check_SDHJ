@@ -28,4 +28,4 @@ jobs:
 
 
       - name: Deploy
-        run:  mvn -B -X -P release clean deploy -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
+        run:  mvn -B -X -P release clean deploy -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}" -Dsettings.security.disabled=true
