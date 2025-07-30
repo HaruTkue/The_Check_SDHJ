@@ -58,7 +58,7 @@
           <artifactId>central-publishing-maven-plugin</artifactId>
           <executions>
             <execution>
-              <id>central-deploy</id>
+              <id>central-injected-central-publishing</id>
               <phase>none</phase>
             </execution>
           </executions>
