@@ -63,6 +63,10 @@
                     <artifactId>central-publishing-maven-plugin</artifactId>
                     <version>0.8.0</version>
                     <extensions>true</extensions>
+                    <configuration>
+                        <publishingServerId>central</publishingServerId>
+                        <autoPublish>true</autoPublish>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
