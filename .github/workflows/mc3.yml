@@ -23,6 +23,6 @@ jobs:
 
 
       - name: Deploy
-        run:  mvn -B -P release clean deploy -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
+        run:  mvn -B -P releasemvc clean deploy -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
 
       

@@ -58,19 +58,11 @@
     </dependencies>
 
     <!-- deploy plugin-->
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.sonatype.central</groupId>
-                <artifactId>central-publishing-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
     
     <!--soruce plugin--> 
     <profiles>
         <profile>
-            <id>release</id>
+            <id>releasemvc</id>
             <build>
                 <plugins>
                     <plugin>
