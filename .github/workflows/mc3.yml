@@ -22,10 +22,9 @@ jobs:
         with:
            distribution: temurin
            java-version: '21'
-           server-id: central
-           server-username: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
-           server-password: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
-
 
       - name: Deploy
-        run:  mvn -B -X -P release clean deploy -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}" -Dsettings.security.disabled=true
+        run:  mvn -B -P release clean deploy -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}" -Dcentral.sonatype.username="${{ secrets.CENTRAL_TOKEN_USERNAME }}" -Dcentral.sonatype.password="${{ secrets.CENTRAL_TOKEN_PASSWORD }}"
+
+      - name: PomCheck
+        run: mvn help:effective-pom -pl :sdhjchecker-cli -P release
