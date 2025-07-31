@@ -48,7 +48,7 @@ jobs:
           git_user_signingkey: true
 
       - name: version set 
-        run: mvn versions:set -DnewVersion=${{ github.event.inputs.version }} -DgenerateBackupPoms= false -pl core
+        run: mvn versions:set -DnewVersion=${{ github.event.inputs.version }} -DgenerateBackupPoms=false -pl core
 
       - name: deploy core-module 
         run: mvn -B deploy -Prelease-central -pl core -DskipTests -X
@@ -58,5 +58,5 @@ jobs:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: pom reset 
-        run: mvn versions:revert -pl Core
+        run: mvn versions:revert -pl core
         if: always()
