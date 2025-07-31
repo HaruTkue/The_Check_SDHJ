@@ -31,9 +31,9 @@ jobs:
         with:
            distribution: temurin
            java-version: '21'
-           #server-id: central
-           #server-username: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
-           #server-password: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
+           server-id: central
+           server-username: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
+           server-password: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
 
 
       - name: Deploy
