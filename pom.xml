@@ -44,7 +44,6 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <central.publishing.skip>false</central.publishing.skip>
     </properties>
 
 
@@ -55,9 +54,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>3.1.2</version>
-                    <configuration>
-                        <skip>true</skip>
-                    </configuration>
                 </plugin>
 
             </plugins>
@@ -72,7 +68,7 @@
                     <plugin>
                         <groupId>org.sonatype.central</groupId>
                         <artifactId>central-publishing-maven-plugin</artifactId>
-                        <version>0.9.0</version>
+                        <version>0.8.0</version>
                         <extensions>true</extensions>
                         <configuration>
                         <publishingServerId>central</publishingServerId>

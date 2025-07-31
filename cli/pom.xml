@@ -15,10 +15,6 @@
     <artifactId>sdhjchecker-cli</artifactId>
     <packaging>jar</packaging>
 
-
-    <properties>
-      <central.publishing.skip>true</central.publishing.skip>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>io.github.harutkue</groupId>

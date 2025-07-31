@@ -37,6 +37,10 @@ jobs:
 
 
       - name: Deploy
-        run:  mvn -B -P releasemvc clean deploy -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
+        run: |
+           mvn -B -P releasemvc clean install -D gpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
+
+           mvn -B -pl core -P releasemvc deploy -D gpg.passphrase="${{ secrets.GPG_PASSPHRASE}}" 
+
 
       
