@@ -81,15 +81,16 @@
     <profiles>
         <profile>
             <id>release-central</id>
-            <plugins>
-                <plugin>
-                    <groupId>org.sonatype.central</groupId>
-                    <artifactId>central-publishing-maven-plugin</artifactId>
-                    <extensions>true</extensions>
-                    <configuration>
-                        <publishingServerId>central</publishingServerId>
-                        <autoPublish>true</autoPublish>
-                        <waitUntil>published</waitUntil>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>published</waitUntil>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -137,7 +138,8 @@
                         <passphrase>${env.GPG_PASSPHRASE}</passphrase>
                     </configuration>
                 </plugin>
-            </plugins>
+             </plugins>
+            </build>
         </profile>
     </profiles>
 
