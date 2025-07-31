@@ -25,12 +25,6 @@ jobs:
 
 
       - name: Deploy
-        run: |
-           mvn -B -P releasemvc clean install -D gpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
-
-           mvn -B -pl core -P releasemvc deploy \
-            -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE}}" \
-            -Dcentral.sonatype.username="${{ secrets.CENTRAL_TOKEN_USERNAME }}" \
-            -Dcentral.sonatype.password="${{ secrets.CENTRAL_TOKEN_PASSWORD}}"
-
-      
+        run: >-
+            mvn -B -P releasemvc clean deploy -pl core -am nexus-staging:release
+            -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
