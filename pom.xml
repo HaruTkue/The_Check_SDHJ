@@ -73,8 +73,7 @@
                         <configuration>
                             <publishingServerId>central</publishingServerId>
                             <autoPublish>true</autoPublish>
-                        <skip>${central.publishing.skip}</skip>
-                    </configuration>
+                        </configuration>
                 </plugin>
                 </plugins>
             </build>

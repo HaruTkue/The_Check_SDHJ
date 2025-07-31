@@ -12,18 +12,6 @@ jobs:
       - name: Import key
         run: echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 -d | gpg --batch --import
 
-      - name: Debug Keys
-        run: |
-          if [ -z "${{ secrets.CENTRAL_TOKEN_USERNAME}}" ]; then 
-            echo "::error::CENTRAL_TOKEN_USERNAME secrets is not set"
-          else 
-            echo "CENTRAL_USERNAME Set"
-          fi
-          if [ -z "${{ secrets.CENTRAL_TOKEN_PASSWORD}}" ]; then
-            echo "::error::CENTRAL_TOKEN_PASSWORD not set"
-          else 
-            echo "CENTRAL_TOKEN_PASSWORD set"
-          fi
 
 
       - name: Set Java
@@ -41,8 +29,8 @@ jobs:
            mvn -B -P releasemvc clean install -D gpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
 
            mvn -B -pl core -P releasemvc deploy \
-            -D gpg.passphrase="${{ secrets.GPG_PASSPHRASE}}" \
-            -D central.sonatype.username="${{ secrets.CENTRAL_TOKEN_USERNAME }}" \
-            -D central.sonatype.password="${{ secrets.CENTRAL_TOKEN_PASSWORD}}"
+            -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE}}" \
+            -Dcentral.sonatype.username="${{ secrets.CENTRAL_TOKEN_USERNAME }}" \
+            -Dcentral.sonatype.password="${{ secrets.CENTRAL_TOKEN_PASSWORD}}"
 
       
