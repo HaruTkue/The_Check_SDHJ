@@ -7,18 +7,15 @@
     <parent>
         <groupId>io.github.harutkue</groupId>
         <artifactId>sdhjchecker</artifactId>
-        <version>1.0</version>
+        <version>1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>core</artifactId>
+    <artifactId>sdhjchecker-core-module</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0.0</version>
 
-    <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-    <!--Name等-->
+
     <name>SDHJChecker CoreModule</name>
     <description>Core module</description>
     <url>https://github.com/HaruTkue/The_Check_SDHJ</url>
@@ -60,111 +57,5 @@
             <version>2.0.9</version>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <!--Mvn central 追加用-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>3.0.1</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals><goal>sign</goal></goals>
-                    </execution>
-                </executions>
-            </plugin>
-            
 
-            <!--Javadoc-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.3.0</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals><goal>jar</goal></goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.4.0</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!--shadeプラグイン-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>io.github.harutkue.checksdhj.app.Main</mainClass>
-                                    <manifestEntries>
-                                        <Multi-Release>true</Multi-Release>
-                                    </manifestEntries>
-                                </transformer>
-                                <!--ServicesResourceTransFormer-->
-                                <!--
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer">
-                                </transformer>
-                                -->
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer">
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-
-    <!--Mvn central向け-->
-    <distributionManagement>
-        <repository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
-    <licenses>
-        <license>
-            <name>Apache Licence, Version 2.0</name>
-            <url>https://opensource.org/license/apache-2-0</url>
-        </license>
-    </licenses>
-
-    <!--Userのやつ-->
-    <scm>
-        <url>https://github.com/HaruTkue/The_Check_SDHJ</url>
-        <connection>scm:git:git://github.com/HaruTkue/The_Check_SDHJ.git</connection>
-        <developerConnection>scm:git:ssh://github.com:HaruTkue/The_Check_SDHJ.git</developerConnection>
-    </scm>
-
-    <developers>
-        <developer>
-            <id>HaruTkue</id>
-            <name>HaruTkue</name>
-            <email>harutkue@users.noreply.github.com</email>
-        </developer>
-    </developers>
 </project>

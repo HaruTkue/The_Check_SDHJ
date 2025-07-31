@@ -1,0 +1,46 @@
+name: maven central deploy version 0.4
+
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Core Module Release Version"
+        required: true
+        type: string
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout 
+        uses: actions/checkout@v4
+
+      - name: setup jdk
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+          cache: maven
+          #settings xmlの内容書き込み
+          server-id: central 
+          server-username: CENTRAL_TOKEN_USERNAME
+          server-password: CENTRAL_TOKEN_PASSWORD
+
+      - name: import GPG key
+        id:   import_gpg
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          git_user_signingkey: true
+
+      - name: deploy core-module 
+        run: mvn -B deploy -Prelease-central -pl core -DskipTests
+        env:
+          MAVEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
