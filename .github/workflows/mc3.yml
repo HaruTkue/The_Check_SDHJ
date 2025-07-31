@@ -31,16 +31,18 @@ jobs:
         with:
            distribution: temurin
            java-version: '21'
-           server-id: central
-           server-username: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
-           server-password: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
+           #server-id: central
+           #server-username: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
+           #server-password: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
 
 
       - name: Deploy
         run: |
            mvn -B -P releasemvc clean install -D gpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
 
-           mvn -B -pl core -P releasemvc deploy -D gpg.passphrase="${{ secrets.GPG_PASSPHRASE}}" 
-
+           mvn -B -X -pl core -P releasemvc deploy \
+            -D gpg.passphrase="${{ secrets.GPG_PASSPHRASE}}" \
+            -D central.sonatype.username="${{ secrets.CENTRAL_TOKEN_USERNAME }}" \
+            -D central.sonatype.password="${{ secrets.CENTRAL_TOKEN_PASSWORD}}"
 
       
