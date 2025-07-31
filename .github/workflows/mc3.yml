@@ -25,6 +25,4 @@ jobs:
 
 
       - name: Deploy
-        run: >-
-            mvn -B -P releasemvc clean deploy -pl core -am nexus-staging:release
-            -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
+        run: mvn -B -U -P release -pl io.github.harutkue:sdhjchecker-core -am clean deploy -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
