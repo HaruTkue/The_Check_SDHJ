@@ -6,12 +6,12 @@
 
     <groupId>io.github.harutkue</groupId>
     <artifactId>sdhjchecker</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.0.1</version>
     <packaging>pom</packaging>
 
     <name> SDHJChecker Parent pom </name>
     <description> Parent Pom</description>
-    <url>https://github.com/HaruTkue/The_Check_SDH</url>
+    <url>https://github.com/HaruTkue/The_Check_SDHJ</url>
 
     <licenses>
         <license>
@@ -47,8 +47,21 @@
         <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.7.0</maven-javadoc-plugin.version>
+        <maven-gpg-plugin.version>3.2.0</maven-gpg-plugin.version>
     </properties>
 
+
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>central</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>central</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
     <build>
         <pluginManagement>
@@ -81,30 +94,33 @@
     <profiles>
         <profile>
             <id>release-central</id>
-            <plugins>
-                <plugin>
-                    <groupId>org.sonatype.central</groupId>
-                    <artifactId>central-publishing-maven-plugin</artifactId>
-                    <extensions>true</extensions>
-                    <configuration>
-                        <publishingServerId>central</publishingServerId>
-                        <autoPublish>true</autoPublish>
-                        <waitUntil>published</waitUntil>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>published</waitUntil>
                     </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
 
                 <plugin>
-                    <groupId>org.apache.maven.plugin</groupId>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <configuration>
                         <doclint>none</doclint>
@@ -125,6 +141,9 @@
                         <execution>
                             <id>sign-artifacts</id>
                             <phase>verify</phase>
+                            <goals>
+                                <goal>sign</goal>
+                            </goals>
                         </execution>
                     </executions>
                     <configuration>
@@ -137,8 +156,10 @@
                         <passphrase>${env.GPG_PASSPHRASE}</passphrase>
                     </configuration>
                 </plugin>
-            </plugins>
+             </plugins>
+            </build>
         </profile>
     </profiles>
+
 
 </project>

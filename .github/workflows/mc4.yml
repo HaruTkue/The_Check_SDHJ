@@ -14,6 +14,7 @@ jobs:
     permissions:
       contents: write
       packages: write
+      id-token: write
 
     steps:
       - name: Checkout 
@@ -26,21 +27,36 @@ jobs:
           distribution: "temurin"
           cache: maven
           #settings xmlの内容書き込み
-          server-id: central 
-          server-username: CENTRAL_TOKEN_USERNAME
-          server-password: CENTRAL_TOKEN_PASSWORD
+          settings-xml: |
+            <settings>
+              <servers>
+                <server> 
+                  <id>central</id>
+                  <username>${{ secrets.CENTRAL_TOKEN_USERNAME }}</username>
+                  <password>${{ secrets.CENTRAL_TOKEN_PASSWORD }}</password>
+                </server>
+              </servers>
+            </settings>
+          server-id: central
 
       - name: import GPG key
         id:   import_gpg
-        uses: crazy-max/ghaction-import-gpg@v4
+        uses: crazy-max/ghaction-import-gpg@v6
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
           git_user_signingkey: true
 
+      - name: version set 
+        run: mvn versions:set -DnewVersion=${{ github.event.inputs.version }} -DgenerateBackupPoms=false -pl core
+
       - name: deploy core-module 
-        run: mvn -B deploy -Prelease-central -pl core -DskipTests
+        run: mvn -B deploy -Prelease-central -pl core -DskipTests -X
         env:
           MAVEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: pom reset 
+        run: mvn versions:revert -pl core
+        if: always()

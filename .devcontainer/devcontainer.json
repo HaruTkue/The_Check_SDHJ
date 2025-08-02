@@ -13,5 +13,6 @@
     "redhat.redhat.java",  
     "ms-vscode.cpptools",  
     "vscjava.vscjava.vscode-java-debug" // デバッガー拡張
-  ]
+  ],
+  "postCreateCommand": "echo \"$GPG_PRIVATE_KEY\" | gpg --import --batch --yes"
 }

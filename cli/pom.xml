@@ -7,7 +7,7 @@
     <parent>
         <groupId>io.github.harutkue</groupId>
         <artifactId>sdhjchecker</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.0.1</version>
         
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -19,10 +19,14 @@
         <dependency>
             <groupId>io.github.harutkue</groupId>
             <artifactId>sdhjchecker-core-module</artifactId>
-            <version>1.0.0</version>
+            <version>0.0.1</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
+
+    <properties>
+        <central.publishing.skip>true</central.publishing.skip>
+    </properties>
 
     <build>
         <finalName>cli-flat</finalName>
@@ -52,6 +56,30 @@
         </execution>
       </executions>
         </plugin>
+
+        <!--sonatype skip-->
+        <plugin>
+          <groupId>org.sonatype.central</groupId>
+          <artifactId>central-publishing-maven-plugin</artifactId>
+        </plugin>
+        <!--javadoc skip-->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <configuration>
+            <skip>true</skip>
+          </configuration>
+        </plugin>
+        <!--GPG skip-->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <configuration>
+            <skip>true</skip>
+          </configuration>
+        </plugin>
+
+
         </plugins>
     </build>
 </project>
