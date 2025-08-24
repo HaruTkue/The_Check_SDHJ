@@ -7,13 +7,13 @@
     <parent>
         <groupId>io.github.harutkue</groupId>
         <artifactId>sdhjchecker</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>sdhjchecker-core-module</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 
 
     <name>SDHJChecker CoreModule</name>
