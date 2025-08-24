@@ -93,6 +93,7 @@ public class Core2 {
             Map<String,String> RetrunValue = new HashMap<>();
 
             int CheckCount = DataList.length();
+            System.out.println("検知処理IS読み出し完了");
             for (int i = 0; i< CheckCount; i++){
                 JSONObject CheckService = DataList.getJSONObject(i);
                 String ServiceName = CheckService.getString("Name");
@@ -170,15 +171,19 @@ public class Core2 {
                             //EXの場合はこの処理に追加して状態を特定できるようにする.
 
                         }
+                        
                     }else{
+                        System.out.println("通過");
                         continue;
                     }
                     //この場合は検知ステータスが全くなかったケース
+                    
                 }
                 Map<String,String> Value = new HashMap<>();
                 Value.put(CheckDatas.DomainData(),"3");
-                return Value;
+                continue;
             }
+            return null;
         }catch (IOException e){
             //どこかのエラー
             e.printStackTrace(); 
@@ -187,7 +192,6 @@ public class Core2 {
 
             return ErrorRq;
         }
-        return null;
     }
 
     //ホスト云々
@@ -265,7 +269,9 @@ public class Core2 {
         //入力データの型check
         if(DomainData instanceof String){
             //単独データ
+            System.out.println("Search分岐");
             CheckerRecords Record = GetCnameRecord(DomainData.toString());
+            System.out.println(Record);
             //ViaList がいらないように調節
             ReturnList.add(OneSearch(Record));
 
@@ -286,6 +292,7 @@ public class Core2 {
                 }else{
                     //レコード取得
                     Record = GetCnameRecord(CheckDoaminsData);
+                    System.out.println(Record);
                     MultiSearchList.add(Record);
                 }
             }
