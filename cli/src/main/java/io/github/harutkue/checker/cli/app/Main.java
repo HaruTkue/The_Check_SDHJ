@@ -84,15 +84,11 @@ public class Main {
         do {
             // 処理の形式が正式であるかを確認する。
             CheckDomain = scanner.nextLine();
-            // おなやみ:現状の入力状況を出力しようかな
-            if ((SubDomainPattern.matcher(CheckDomain)).matches() || (DomainPattern.matcher(CheckDomain)).matches()) {
+            if (true) {
                 // 適合している
                 
                 System.out.println("正しく入力されました。");
                 break;
-            }else {
-                // 不適合
-                System.out.println("適切な形式で入力してください");
             }
 
         } while (true);

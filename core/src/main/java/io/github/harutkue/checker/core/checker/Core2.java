@@ -93,7 +93,6 @@ public class Core2 {
             Map<String,String> RetrunValue = new HashMap<>();
 
             int CheckCount = DataList.length();
-            System.out.println("検知処理IS読み出し完了");
             for (int i = 0; i< CheckCount; i++){
                 JSONObject CheckService = DataList.getJSONObject(i);
                 String ServiceName = CheckService.getString("Name");
@@ -173,7 +172,6 @@ public class Core2 {
                         }
                         
                     }else{
-                        System.out.println("通過");
                         continue;
                     }
                     //この場合は検知ステータスが全くなかったケース
@@ -204,11 +202,8 @@ public class Core2 {
             //ホスト名の指定
             HttpGet request = new HttpGet(url);
             request.setHeader("Host",CheckData.Record());
-            //System.out.println("リクエスト内容");
-            //System.out.println(request);
             try(CloseableHttpResponse response = client.execute(request)){
                 int responseCode = response.getCode();
-                //System.out.println("リクエスト結果:" + responseCode);
                 //判定
                 if (responseCode >= 200 && responseCode < 400){
                     ReturnValue = "1";
@@ -242,7 +237,6 @@ public class Core2 {
             //connection
             connection.connect();
             int responseCode = connection.getResponseCode();
-            //System.out.println("リクエスト結果:" + responseCode);
             //判定
             if (responseCode >= 200 && responseCode < 400){
                 ReturnValue = "1";
@@ -269,9 +263,7 @@ public class Core2 {
         //入力データの型check
         if(DomainData instanceof String){
             //単独データ
-            System.out.println("Search分岐");
             CheckerRecords Record = GetCnameRecord(DomainData.toString());
-            System.out.println(Record);
             //ViaList がいらないように調節
             ReturnList.add(OneSearch(Record));
 
@@ -292,7 +284,6 @@ public class Core2 {
                 }else{
                     //レコード取得
                     Record = GetCnameRecord(CheckDoaminsData);
-                    System.out.println(Record);
                     MultiSearchList.add(Record);
                 }
             }
