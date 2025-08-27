@@ -2,13 +2,14 @@
   {
     "Name": "GithubPages",
     "ServiceHost": "github.io",
-    "PassStatus": true,
+    "PassStatus": false,
     "CNAMEIdentifier": [
       ".*\\.github\\.io\\.?$"
     ],
     "ARecordIdentifier": [
       "185.199.108.153"
-    ]
+    ],
+    "fingerprint": "NSSearch"
   },  
   {
     "Name": "Render",
@@ -20,7 +21,7 @@
     "ARecordIdentifier": [
       ""
     ],
-    "fingerprint": "NSearch"
+    "fingerprint": "NSSearch"
   },
 
   {
@@ -37,10 +38,11 @@
 
   {
     "Name": "Vercel",
-    "PassStatus": true,
+    "PassStatus": false,
     "CNAMEIdentifier": [
-      ".*\\.vercel\\.app\\.?$|.*\\.vercel-dns\\.com\\.?$"
-    ]
+      ".*\\.vercel\\.app\\.?$|.*\\.vercel-dns-[0-9]+\\.com\\.?$"
+    ],
+    "fingerprint": "NSSearch"
   },
 
   {

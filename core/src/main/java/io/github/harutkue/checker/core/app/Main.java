@@ -53,13 +53,12 @@ public class Main {
         */
         //複数データチェック
         List<String> TestData = new ArrayList<>();
-        List<Map<String,String>> Test = Core2.GetRequestValue("verceltest.tkue.net");
+        List<Map<String,String>> Test = Core2.GetRequestValue("badstatusrender.tkue.net");
 
         System.out.println(Test);
 
         TestData.add("harugpg.shinchokudonan.com");
         TestData.add("nise.shinchokudonan.com");
-        TestData.add("testvercel.tkue.net");
 
         TestData.add("frigpnhidsg.shinchokudonan.com");
 
