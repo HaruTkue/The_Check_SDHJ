@@ -59,7 +59,6 @@ public class Main {
 
         TestData.add("harugpg.shinchokudonan.com");
         TestData.add("nise.shinchokudonan.com");
-        TestData.add("testvercel.tkue.net");
 
         TestData.add("frigpnhidsg.shinchokudonan.com");
 
