@@ -140,7 +140,6 @@ public class Core2 {
                             // NSearchの可否で状態を問う
                             if (SearchFP.equals("NSearch")) {
                                 // NSearch実行
-                                
                                 return SearchN(CheckDatas);
 
                             } else if (SearchFP.equals("NSSearch")) {
@@ -196,8 +195,6 @@ public class Core2 {
 
     // ホスト云々
     public static Map<String, String> SearchAns3(CheckerRecords CheckData) {
-        System.out.println("分岐確認");
-        System.out.println(CheckData);
         String CheckDomainRecord = CheckData.Record().replaceAll("\\.$", "");
         String url = "https://" + CheckDomainRecord;
         Map<String, String> answer = new HashMap<>();
@@ -219,8 +216,8 @@ public class Core2 {
         } catch (Exception e) {
             // 誤りコード
             answer.put(CheckData.DomainData(), "201");
-            e.printStackTrace();
         }
+
         return answer;
     }
 
@@ -256,7 +253,6 @@ public class Core2 {
         } catch (IOException e) {
             // 誤りコード
             answer.put(CheckData.DomainData(), "201");
-            e.printStackTrace();
         }
         return answer;
 
@@ -319,7 +315,6 @@ public class Core2 {
         } catch (IOException e) {
             // 誤りコード
             answer.put(CheckData.DomainData(), "201");
-            e.printStackTrace();
         }
 
         return answer;
